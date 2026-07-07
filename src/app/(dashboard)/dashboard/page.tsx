@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { profile } from "@/src/services/auth.service";
+import { profile } from "@/services/auth.service";
 
 export default function DashboardPage() {
   useEffect(() => {
