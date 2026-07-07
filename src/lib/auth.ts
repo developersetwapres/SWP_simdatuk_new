@@ -6,8 +6,8 @@ export const auth = {
   setToken(token: string) {
     Cookies.set(TOKEN_KEY, token, {
       expires: 1,
-      path: "/", // <-- Tambahkan ini
-      sameSite: "Lax", // <-- Ganti dari Strict
+      path: "/",
+      sameSite: "Lax",
       secure: process.env.NODE_ENV === "production",
     });
   },

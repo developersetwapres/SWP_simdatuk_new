@@ -1,13 +1,13 @@
 import { AuthCardLayout } from "@/components/layouts/auth-layout";
-import { LoginForm } from "@/components/pages/auth/login-form";
+import type React from "react";
 
-export default function LoginPage() {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <AuthCardLayout
       title="SIMDATUK"
       description="Sistem Informasi Manajemen Data Dukungan Kepegawaian Sekretariat Wakil Presiden Republik Indonesia"
     >
-      <LoginForm />
+      {children}
     </AuthCardLayout>
   );
 }

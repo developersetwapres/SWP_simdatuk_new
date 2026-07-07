@@ -7,12 +7,14 @@ import type {
 
 export const login = async (payload: LoginRequest): Promise<LoginResponse> => {
   const { data } = await api.post<LoginResponse>("/login", payload);
-
   return data;
+};
+
+export const logout = async (): Promise<void> => {
+  await api.delete("/logout");
 };
 
 export const profile = async (): Promise<ProfileResponse> => {
   const { data } = await api.get<ProfileResponse>("/profile");
-
   return data;
 };
