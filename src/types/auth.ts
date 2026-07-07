@@ -3,7 +3,7 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface User {
+export interface LoginUser {
   id: number;
   username: string;
   email: string;
@@ -21,5 +21,22 @@ export interface LoginResponse {
   code: number;
   message: string;
   token: string;
-  user: User;
+  user: LoginUser;
+}
+
+export interface Profile {
+  id: number;
+  name: string;
+  employee_id: string | null;
+  registration_number: string | null;
+  photo_profile: string | null;
+  username: string;
+  email: string;
+  role_name: string;
+}
+
+export interface ProfileResponse {
+  code: number;
+  message: string;
+  data: Profile;
 }
