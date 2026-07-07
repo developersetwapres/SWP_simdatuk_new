@@ -2,10 +2,8 @@
 
 import * as React from "react";
 
-import { NavDocuments } from "@/components/nav-documents";
 import { NavMain } from "@/components/nav-main";
-import { NavSecondary } from "@/components/nav-secondary";
-import { NavUser } from "@/components/nav-user";
+import { NavProjects } from "@/components/nav-projects";
 import {
   Sidebar,
   SidebarContent,
@@ -14,144 +12,187 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarRail,
 } from "@/components/ui/sidebar";
+import { NavUser } from "@/components/nav-user";
 import {
-  LayoutDashboardIcon,
-  ListIcon,
-  ChartBarIcon,
-  FolderIcon,
-  UsersIcon,
-  CameraIcon,
-  FileTextIcon,
-  Settings2Icon,
-  CircleHelpIcon,
-  SearchIcon,
-  DatabaseIcon,
-  FileChartColumnIcon,
-  FileIcon,
-  CommandIcon,
+  LayoutDashboard,
+  Users,
+  BriefcaseBusiness,
+  Database,
+  Download,
 } from "lucide-react";
+
+import { FrameIcon, PieChartIcon, MapIcon } from "lucide-react";
 import Image from "next/image";
 
+// This is sample data.
 const data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
+
   navMain: [
     {
-      title: "Dashboard",
+      title: "Rekapitulasi",
       url: "#",
-      icon: <LayoutDashboardIcon />,
-    },
-    {
-      title: "Lifecycle",
-      url: "#",
-      icon: <ListIcon />,
-    },
-    {
-      title: "Analytics",
-      url: "#",
-      icon: <ChartBarIcon />,
-    },
-    {
-      title: "Projects",
-      url: "#",
-      icon: <FolderIcon />,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: <UsersIcon />,
-    },
-  ],
-  navClouds: [
-    {
-      title: "Capture",
-      icon: <CameraIcon />,
-      isActive: true,
-      url: "#",
+      icon: <LayoutDashboard />,
+      isActive: false,
       items: [
         {
-          title: "Active Proposals",
+          title: "Komposisi Pegawai",
           url: "#",
         },
         {
-          title: "Archived",
+          title: "Pegawai ASN",
+          url: "#",
+        },
+        {
+          title: "Non ASN + Perbantuan",
+          url: "#",
+        },
+        {
+          title: "Pegawai Outsourcing",
+          url: "#",
+        },
+        {
+          title: "Peta Jabatan",
+          url: "#",
+        },
+        {
+          title: "Bandingkan Pegawai",
+          url: "#",
+        },
+        {
+          title: "Promosi Pegawai",
           url: "#",
         },
       ],
     },
     {
-      title: "Proposal",
-      icon: <FileTextIcon />,
+      title: "Data Pegawai",
       url: "#",
+      icon: <Users />,
       items: [
         {
-          title: "Active Proposals",
+          title: "ASN",
           url: "#",
         },
         {
-          title: "Archived",
+          title: "Non ASN + Perbantuan",
+          url: "#",
+        },
+        {
+          title: "Outsourcing",
           url: "#",
         },
       ],
     },
     {
-      title: "Prompts",
-      icon: <FileTextIcon />,
+      title: "Data Riwayat",
       url: "#",
+      icon: <BriefcaseBusiness />,
       items: [
         {
-          title: "Active Proposals",
+          title: "Jabatan",
           url: "#",
         },
         {
-          title: "Archived",
+          title: "Golongan",
+          url: "#",
+        },
+        {
+          title: "Pelatihan Struktural",
+          url: "#",
+        },
+        {
+          title: "Pelatihan Fungsional",
+          url: "#",
+        },
+        {
+          title: "Pelatihan Teknis",
+          url: "#",
+        },
+        {
+          title: "Penghargaan",
+          url: "#",
+        },
+        {
+          title: "SKP",
+          url: "#",
+        },
+        {
+          title: "Penilaian Prestasi Kerja",
+          url: "#",
+        },
+        {
+          title: "Hukuman Disiplin",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Master Data",
+      url: "#",
+      icon: <Database />,
+      items: [
+        {
+          title: "Data Pengguna",
+          url: "#",
+        },
+        {
+          title: "Data Role Pengguna",
+          url: "#",
+        },
+        {
+          title: "Data Jabatan",
+          url: "#",
+        },
+        {
+          title: "Data Golongan",
+          url: "#",
+        },
+        {
+          title: "Data Instansi",
+          url: "#",
+        },
+        {
+          title: "Data Jenis Pegawai",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Export",
+      url: "#",
+      icon: <Download />,
+      items: [
+        {
+          title: "Export Pegawai",
+          url: "#",
+        },
+        {
+          title: "Export DRH",
           url: "#",
         },
       ],
     },
   ],
-  navSecondary: [
+
+  projects: [
     {
-      title: "Settings",
+      name: "Dashboard",
       url: "#",
-      icon: <Settings2Icon />,
-    },
-    {
-      title: "Get Help",
-      url: "#",
-      icon: <CircleHelpIcon />,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: <SearchIcon />,
-    },
-  ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: <DatabaseIcon />,
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: <FileChartColumnIcon />,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: <FileIcon />,
+      icon: <FrameIcon />,
     },
   ],
 };
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar collapsible="icon" variant="inset" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -165,19 +206,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 width={34}
                 height={34}
               />
-              <span className="text-base font-semibold">SIMDATUK</span>
+              <span className="text-base font-semibold">
+                SIMDATUK SETWAPRES
+              </span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
+        {/* <TeamSwitcher teams={data.teams} /> */}
       </SidebarHeader>
       <SidebarContent>
+        <NavProjects projects={data.projects} />
         <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
       </SidebarFooter>
+      <SidebarRail />
     </Sidebar>
   );
 }
