@@ -4,14 +4,14 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { auth } from "@/lib/auth";
-import { login } from "@/services/auth.service";
+import { auth } from "@/src/lib/auth";
+import { login } from "@/src/services/auth.service";
 
-import { loginSchema, LoginFormData } from "@/schemas/auth.schema";
+import { loginSchema, LoginFormData } from "@/src/schemas/auth.schema";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/src/components/ui/button";
+import { Input } from "@/src/components/ui/input";
+import { Label } from "@/src/components/ui/label";
 
 export function LoginForm() {
   const router = useRouter();
