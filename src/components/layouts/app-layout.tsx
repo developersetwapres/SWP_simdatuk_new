@@ -42,7 +42,7 @@ export function LayoutDashboard({ children }: { children: React.ReactNode }) {
             </Breadcrumb>
           </div>
         </header>
-        {children}
+        <main className="px-4 py">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

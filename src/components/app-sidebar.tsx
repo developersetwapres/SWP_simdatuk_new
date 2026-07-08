@@ -97,39 +97,39 @@ const data = {
       items: [
         {
           title: "Jabatan",
-          url: "#",
+          url: "/dashboard/data-riwayat/jabatan",
         },
         {
           title: "Golongan",
-          url: "#",
+          url: "/dashboard/data-riwayat/golongan",
         },
         {
           title: "Pelatihan Struktural",
-          url: "#",
+          url: "/dashboard/data-riwayat/pelatihan-struktural",
         },
         {
           title: "Pelatihan Fungsional",
-          url: "#",
+          url: "/dashboard/data-riwayat/pelatihan-fungsional",
         },
         {
           title: "Pelatihan Teknis",
-          url: "#",
+          url: "/dashboard/data-riwayat/pelatihan-teknis",
         },
         {
           title: "Penghargaan",
-          url: "#",
+          url: "/dashboard/data-riwayat/penghargaan",
         },
         {
           title: "SKP",
-          url: "#",
+          url: "/dashboard/data-riwayat/skp",
         },
         {
           title: "Penilaian Prestasi Kerja",
-          url: "#",
+          url: "/dashboard/data-riwayat/ppk",
         },
         {
           title: "Hukuman Disiplin",
-          url: "#",
+          url: "/dashboard/data-riwayat/hukuman-disiplin",
         },
       ],
     },
