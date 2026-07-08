@@ -35,7 +35,7 @@ export function NavMain({
     <SidebarGroup>
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton render={<a href={"#"} />}>
+          <SidebarMenuButton render={<a href={"/dashboard"} />}>
             <FrameIcon />
             <span>Dashboard</span>
           </SidebarMenuButton>

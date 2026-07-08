@@ -78,15 +78,15 @@ const data = {
       items: [
         {
           title: "ASN",
-          url: "#",
+          url: "/dashboard/data-pegawai/asn",
         },
         {
           title: "Non ASN + Perbantuan",
-          url: "#",
+          url: "/dashboard/data-pegawai/non-asn-perbantuan",
         },
         {
           title: "Outsourcing",
-          url: "#",
+          url: "/dashboard/data-pegawai/outsourcing",
         },
       ],
     },

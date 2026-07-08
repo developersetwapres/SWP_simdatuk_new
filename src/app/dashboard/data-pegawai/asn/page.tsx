@@ -1,4 +1,4 @@
-import { Dashboard } from "@/components/pages/dashboard/page";
+import { DataPegawai } from "@/components/pages/data-pegawai/page";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -6,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <Dashboard />;
+  return <DataPegawai />;
 }
