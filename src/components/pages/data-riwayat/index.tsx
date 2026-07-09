@@ -1,12 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { MoreHorizontalIcon } from "lucide-react";
-
+import { TableEmptyState } from "@/components/empty-states/table-empty-state";
 import { HISTORY_MODULES, HistoryModule } from "@/constants/history";
 import { getHistory } from "@/services/history.service";
-
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { PageHeader } from "@/components/page-header";
+import { TableSkeleton } from "@/components/skeletons/table-skeleton";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +17,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -30,20 +33,35 @@ interface Props {
 
 export function DataRiwayat({ module }: Props) {
   const config = HISTORY_MODULES[module];
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["history", module],
+  const limit = 10;
+
+  const { data, isLoading, isFetching, error } = useQuery({
+    queryKey: ["history", module, page, search],
     queryFn: () =>
       getHistory(config.endpoint, {
-        page: 1,
-        limit: 10,
-        search: "",
+        page,
+        limit,
+        search,
         type: config.type,
       }),
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="space-y-4">
+        <div>
+          <Skeleton className="h-8 w-56" />
+          <Skeleton className="mt-2 h-4 w-36" />
+        </div>
+
+        <Skeleton className="h-10 w-72" />
+
+        <TableSkeleton />
+      </div>
+    );
   }
 
   if (error) {
@@ -52,12 +70,20 @@ export function DataRiwayat({ module }: Props) {
 
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-2xl font-semibold">{config.title}</h1>
-        <p className="text-muted-foreground text-sm">
-          Total Data : {data?.pagination.total ?? 0}
-        </p>
-      </div>
+      <PageHeader
+        title={config.title}
+        total={data?.pagination.total}
+        search={search}
+        searchPlaceholder={`Cari ${config.title.toLowerCase()}...`}
+        onSearch={(value) => {
+          setSearch(value);
+          setPage(1);
+        }}
+      />
+
+      {isFetching && (
+        <p className="text-sm text-muted-foreground">Memuat data...</p>
+      )}
 
       <Table>
         <TableHeader>
@@ -72,14 +98,11 @@ export function DataRiwayat({ module }: Props) {
 
         <TableBody>
           {data?.data.length === 0 && (
-            <TableRow>
-              <TableCell
-                colSpan={5}
-                className="text-center text-muted-foreground"
-              >
-                Tidak ada data.
-              </TableCell>
-            </TableRow>
+            <TableEmptyState
+              colSpan={5}
+              title="Data tidak ditemukan"
+              description="Coba ubah kata kunci pencarian atau tambahkan data baru."
+            />
           )}
 
           {data?.data.map((item) => (
@@ -121,6 +144,30 @@ export function DataRiwayat({ module }: Props) {
           ))}
         </TableBody>
       </Table>
+      <div className="flex items-center justify-between">
+        <p className="text-muted-foreground text-sm">
+          Halaman {data?.pagination.current_page} dari{" "}
+          {data?.pagination.total_pages}
+        </p>
+
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            disabled={page === 1}
+            onClick={() => setPage((prev) => prev - 1)}
+          >
+            Sebelumnya
+          </Button>
+
+          <Button
+            variant="outline"
+            disabled={page === data?.pagination.total_pages}
+            onClick={() => setPage((prev) => prev + 1)}
+          >
+            Selanjutnya
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
