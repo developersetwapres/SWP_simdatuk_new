@@ -3,13 +3,14 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { MoreHorizontalIcon } from "lucide-react";
-import { TableEmptyState } from "@/components/empty-states/table-empty-state";
 import { HISTORY_MODULES, HistoryModule } from "@/constants/history";
 import { getHistory } from "@/services/history.service";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { formatPeriod } from "@/lib/date";
 import { PageHeader } from "@/components/page-header";
+import { useRouter } from "next/navigation";
 import { TableSkeleton } from "@/components/skeletons/table-skeleton";
+import { TableEmptyState } from "@/components/empty-states/table-empty-state";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +27,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { HistoryItem } from "@/types/history";
 
 interface Props {
   module: HistoryModule;
@@ -33,6 +35,7 @@ interface Props {
 
 export function DataRiwayat({ module }: Props) {
   const config = HISTORY_MODULES[module];
+
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
 
@@ -49,11 +52,36 @@ export function DataRiwayat({ module }: Props) {
       }),
   });
 
+  const getExtraValue = (item: HistoryItem) => {
+    switch (module) {
+      case "pelatihan-struktural":
+      case "pelatihan-fungsional":
+      case "pelatihan-teknis":
+        if (!item.start_date && !item.end_date) return "-";
+
+        return `${item.start_date ?? "-"} s.d ${item.end_date ?? "-"}`;
+
+      case "penghargaan":
+        return item.awarding_institution ?? "-";
+
+      case "skp":
+        return item.appraisal_period ?? "-";
+
+      case "ppk":
+        return item.performance_period ?? "-";
+
+      default:
+        return "-";
+    }
+  };
+
+  const router = useRouter();
+
   if (isLoading) {
     return (
       <div className="space-y-4">
         <div>
-          <Skeleton className="h-8 w-56" />
+          <Skeleton className="h-8 w-60" />
           <Skeleton className="mt-2 h-4 w-36" />
         </div>
 
@@ -65,11 +93,15 @@ export function DataRiwayat({ module }: Props) {
   }
 
   if (error) {
-    return <div>Terjadi kesalahan.</div>;
+    return (
+      <div className="rounded-lg border border-destructive/30 p-6 text-center">
+        Terjadi kesalahan saat memuat data.
+      </div>
+    );
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <PageHeader
         title={config.title}
         total={data?.pagination.total}
@@ -85,67 +117,88 @@ export function DataRiwayat({ module }: Props) {
         <p className="text-sm text-muted-foreground">Memuat data...</p>
       )}
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Nama</TableHead>
-            <TableHead>Periode</TableHead>
-            <TableHead>Total Pegawai</TableHead>
-            <TableHead>Dibuat</TableHead>
-            <TableHead className="w-16 text-right">Aksi</TableHead>
-          </TableRow>
-        </TableHeader>
+      <div className="rounded-lg border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Tanggal</TableHead>
 
-        <TableBody>
-          {data?.data.length === 0 && (
-            <TableEmptyState
-              colSpan={5}
-              title="Data tidak ditemukan"
-              description="Coba ubah kata kunci pencarian atau tambahkan data baru."
-            />
-          )}
+              <TableHead>{config.table.name}</TableHead>
 
-          {data?.data.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell className="font-medium">{item.name}</TableCell>
+              <TableHead>{config.table.period}</TableHead>
 
-              <TableCell>
-                {item.period_month ?? "-"} / {item.period_year ?? "-"}
-              </TableCell>
+              {config.table.extra && (
+                <TableHead>{config.table.extra}</TableHead>
+              )}
 
-              <TableCell>{item.total}</TableCell>
+              <TableHead>Jumlah Pegawai</TableHead>
 
-              <TableCell>{item.created_at}</TableCell>
-
-              <TableCell className="text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger
-                    render={
-                      <Button variant="ghost" size="icon" className="size-8">
-                        <MoreHorizontalIcon />
-                      </Button>
-                    }
-                  />
-
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem>Detail</DropdownMenuItem>
-
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
-
-                    <DropdownMenuSeparator />
-
-                    <DropdownMenuItem variant="destructive">
-                      Hapus
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
+              <TableHead className="w-16 text-right">Aksi</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+
+          <TableBody>
+            {data?.data.length === 0 && (
+              <TableEmptyState
+                colSpan={config.table.extra ? 6 : 5}
+                title="Data tidak ditemukan"
+                description="Coba ubah kata kunci pencarian atau tambahkan data baru."
+              />
+            )}
+
+            {data?.data.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell>{item.created_at}</TableCell>
+
+                <TableCell className="font-medium">{item.name}</TableCell>
+
+                <TableCell>
+                  {formatPeriod(item.period_month, item.period_year)}
+                </TableCell>
+
+                {config.table.extra && (
+                  <TableCell>{getExtraValue(item)}</TableCell>
+                )}
+                <TableCell>{item.total}</TableCell>
+
+                <TableCell className="text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger
+                      render={
+                        <Button variant="ghost" size="icon" className="size-8">
+                          <MoreHorizontalIcon />
+                        </Button>
+                      }
+                    />
+
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        onClick={() =>
+                          router.push(
+                            `/dashboard/data-riwayat/${module}/${item.id}`,
+                          )
+                        }
+                      >
+                        Detail
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>Edit</DropdownMenuItem>
+
+                      <DropdownMenuSeparator />
+
+                      <DropdownMenuItem variant="destructive">
+                        Hapus
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
       <div className="flex items-center justify-between">
-        <p className="text-muted-foreground text-sm">
+        <p className="text-sm text-muted-foreground">
           Halaman {data?.pagination.current_page} dari{" "}
           {data?.pagination.total_pages}
         </p>
@@ -161,7 +214,7 @@ export function DataRiwayat({ module }: Props) {
 
           <Button
             variant="outline"
-            disabled={page === data?.pagination.total_pages}
+            disabled={page >= (data?.pagination.total_pages ?? 1)}
             onClick={() => setPage((prev) => prev + 1)}
           >
             Selanjutnya

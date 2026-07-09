@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 
 interface PageHeaderProps {
   title: string;
+  description?: string;
+
   total?: number;
 
   search?: string;
@@ -18,6 +20,7 @@ interface PageHeaderProps {
 export function PageHeader({
   title,
   total,
+  description,
 
   search,
   onSearch,
@@ -29,6 +32,10 @@ export function PageHeader({
     <div className="space-y-4">
       <div>
         <h1 className="text-2xl font-semibold">{title}</h1>
+
+        {description && (
+          <p className="text-muted-foreground mt-1 text-sm">{description}</p>
+        )}
 
         {total !== undefined && (
           <p className="text-muted-foreground text-sm">Total Data : {total}</p>
