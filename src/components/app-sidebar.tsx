@@ -43,31 +43,31 @@ const data = {
       items: [
         {
           title: "Komposisi Pegawai",
-          url: "#",
+          url: "/dashboard/rekapitulasi/komposisi-pegawai",
         },
         {
           title: "Pegawai ASN",
-          url: "#",
+          url: "/dashboard/rekapitulasi/pegawai-asn",
         },
         {
           title: "Non ASN + Perbantuan",
-          url: "#",
+          url: "/dashboard/rekapitulasi/pegawai-non-asn",
         },
         {
           title: "Pegawai Outsourcing",
-          url: "#",
+          url: "/dashboard/rekapitulasi/pegawai-outsourcing",
         },
         {
           title: "Peta Jabatan",
-          url: "#",
+          url: "/dashboard/rekapitulasi/peta-jabatani",
         },
         {
           title: "Bandingkan Pegawai",
-          url: "#",
+          url: "/dashboard/rekapitulasi/bandingkan-pegawai",
         },
         {
           title: "Promosi Pegawai",
-          url: "#",
+          url: "/dashboard/rekapitulasi/promosi-pegawai",
         },
       ],
     },

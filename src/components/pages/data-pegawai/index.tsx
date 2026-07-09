@@ -1,49 +1,35 @@
 "use client";
 
-import { DataTable } from "@/components/data-table";
-import { getEmployees } from "@/services/employee.service";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
-type Props = {
-  type: string;
-};
+import { EMPLOYEE_MODULES, type EmployeeModule } from "@/constants/employee";
+import { getEmployees } from "@/services/employee.service";
 
-const typeMap = {
-  asn: 1,
-  "non-asn-perbantuan": 2,
-  outsourcing: 3,
-} as const;
+import { PageHeader } from "@/components/page-header";
+import { EmployeeTable } from "@/components/pages/data-pegawai/employee-table";
+
+interface Props {
+  type: EmployeeModule;
+}
 
 export function DataPegawai({ type }: Props) {
-  const apiType = typeMap[type as keyof typeof typeMap];
+  const config = EMPLOYEE_MODULES[type];
 
-  if (!apiType) {
-    return <div>Tipe pegawai tidak ditemukan.</div>;
-  }
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
 
-  const {
-    data = [],
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["employees", apiType],
+  const limit = 10;
+
+  const { data, isLoading, isFetching, error } = useQuery({
+    queryKey: ["employees", type, page, search],
     queryFn: () =>
       getEmployees({
-        type: apiType,
-        page: 1,
-        limit: 50,
+        type: config.type,
+        page,
+        limit,
+        search,
       }),
-    select: (response) =>
-      response.data.map((item) => ({
-        id: item.id,
-        foto: item.photo_profile,
-        nama: item.name,
-        nip: `${item.employee_id_number ?? "-"} / ${
-          item.employee_registration_number ?? "-"
-        }`,
-        pangkatGolongan: item.grade_name ?? "-",
-        jabatanTerakhir: item.position_name ?? "-",
-      })),
   });
 
   if (isLoading) {
@@ -54,5 +40,26 @@ export function DataPegawai({ type }: Props) {
     return <div>Terjadi kesalahan.</div>;
   }
 
-  return <DataTable data={data} />;
+  return (
+    <div className="space-y-6">
+      <PageHeader
+        title={config.title}
+        total={data?.pagination.total}
+        search={search}
+        searchPlaceholder={`Cari ${config.title.toLowerCase()}...`}
+        onSearch={(value) => {
+          setSearch(value);
+          setPage(1);
+        }}
+      />
+
+      {isFetching && (
+        <p className="text-sm text-muted-foreground">Memuat data...</p>
+      )}
+
+      <EmployeeTable module={type} employees={data?.data ?? []} />
+
+      {/* pagination nanti kita pindahkan seperti DataRiwayat */}
+    </div>
+  );
 }
