@@ -13,7 +13,7 @@ interface SectionCardProps {
   description?: string;
   icon?: LucideIcon;
   className?: string;
-  data: any[];
+  data?: any[];
 }
 
 export function SectionCard({
@@ -23,7 +23,10 @@ export function SectionCard({
   description,
   icon: Icon = Building2,
   className,
+  data,
 }: SectionCardProps) {
+  console.log(data);
+
   return (
     <Card
       className={cn(
@@ -66,7 +69,14 @@ export function SectionCard({
 
       <CardContent>
         <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 pb-7">
-          <RekapitulasiCard data={data} />
+          {data?.map((item, index) => (
+            <RekapitulasiCard
+              key={index}
+              title={item.name}
+              total={item.total}
+              Icon={Building2}
+            />
+          ))}
         </div>
       </CardContent>
     </Card>

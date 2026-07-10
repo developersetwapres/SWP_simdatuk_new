@@ -20,14 +20,18 @@ export function PegawaiASN() {
 
   return (
     <div className="space-y-6">
-      <SectionCard
-        key={}
-        title={}
-        total={}
-        totalItem={}
-        data={}
-        icon={Building2}
-      />
+      {data.data.cards.map((card, index) => {
+        return (
+          <SectionCard
+            key={index}
+            title={card.name}
+            total={card.total}
+            totalItem={card.cards?.length}
+            icon={Building2}
+            data={card.cards}
+          />
+        );
+      })}
     </div>
   );
 }

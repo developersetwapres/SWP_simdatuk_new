@@ -3,6 +3,7 @@
 import { ReactNode } from "react";
 
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 interface PageHeaderProps {
   title: string;
@@ -58,6 +59,8 @@ export function PageHeader({
           {action}
         </div>
       )}
+
+      <Link href={"/dashboard/tambah-data-pegawai/asn"}>Tambah Data</Link>
     </div>
   );
 }
