@@ -6,6 +6,8 @@ import {
   BookOpenIcon,
   BriefcaseBusinessIcon,
   CalendarCheckIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   ClipboardCheckIcon,
   FilePlus2Icon,
   GraduationCapIcon,
@@ -744,6 +746,7 @@ function fieldName(section: FormSection, field: FormField, index?: number) {
 function renderField(
   section: FormSection,
   field: FormField,
+  isActive: boolean,
   index?: number,
 ) {
   const id = `${section.id}-${index ?? 0}-${field.name}`;
@@ -757,7 +760,7 @@ function renderField(
       <Select
         name={name}
         defaultValue={field.defaultValue}
-        required={field.required}
+        required={isActive && field.required}
       >
         <SelectTrigger
           id={id}
@@ -779,7 +782,7 @@ function renderField(
       <Textarea
         id={id}
         name={name}
-        required={field.required}
+        required={isActive && field.required}
         placeholder={field.placeholder}
         rows={4}
         className="bg-background/80"
@@ -791,7 +794,7 @@ function renderField(
         id={id}
         name={name}
         type={getInputType(field.type)}
-        required={field.required}
+        required={isActive && field.required}
         accept={field.accept}
         placeholder={field.placeholder}
         min={field.type === "number" ? 0 : undefined}
@@ -825,6 +828,7 @@ export function TambahDataPegawai({ type }: Props) {
   const config = EMPLOYEE_MODULES[type];
   const sections = useMemo(() => getSections(type), [type]);
   const [submitted, setSubmitted] = useState(false);
+  const [activeSectionIndex, setActiveSectionIndex] = useState(0);
   const [entryCounts, setEntryCounts] = useState<Record<string, number>>(() =>
     sections.reduce<Record<string, number>>((counts, section) => {
       if (section.repeatable) counts[section.id] = 1;
@@ -833,7 +837,24 @@ export function TambahDataPegawai({ type }: Props) {
     }, {}),
   );
 
+  const activeSection = sections[activeSectionIndex];
   const requiredFields = sections[0].fields.filter((field) => field.required);
+  const isFirstSection = activeSectionIndex === 0;
+  const isLastSection = activeSectionIndex === sections.length - 1;
+
+  function goToSection(index: number) {
+    setActiveSectionIndex(index);
+  }
+
+  function goToPreviousSection() {
+    setActiveSectionIndex((current) => Math.max(current - 1, 0));
+  }
+
+  function goToNextSection() {
+    setActiveSectionIndex((current) =>
+      Math.min(current + 1, sections.length - 1),
+    );
+  }
 
   function addEntry(sectionId: string) {
     setEntryCounts((current) => ({
@@ -905,10 +926,15 @@ export function TambahDataPegawai({ type }: Props) {
               <CardContent>
                 <nav className="grid gap-1">
                   {sections.map((section, index) => (
-                    <a
+                    <button
                       key={section.id}
-                      href={`#${section.id}`}
-                      className="group flex items-center gap-2 rounded-lg px-2 py-2 text-sm text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
+                      type="button"
+                      onClick={() => goToSection(index)}
+                      className={cn(
+                        "group flex items-center gap-2 rounded-lg px-2 py-2 text-left text-sm text-muted-foreground transition-colors hover:bg-background hover:text-foreground",
+                        activeSectionIndex === index &&
+                          "bg-background text-foreground shadow-sm",
+                      )}
                     >
                       <span
                         className={cn(
@@ -924,7 +950,7 @@ export function TambahDataPegawai({ type }: Props) {
                       <span className="text-xs tabular-nums text-muted-foreground/70">
                         {String(index + 1).padStart(2, "0")}
                       </span>
-                    </a>
+                    </button>
                   ))}
                 </nav>
               </CardContent>
@@ -933,6 +959,7 @@ export function TambahDataPegawai({ type }: Props) {
 
           <FieldGroup className="gap-6">
             {sections.map((section, index) => {
+              const isActive = activeSectionIndex === index;
               const entries = Array.from({
                 length: section.repeatable ? entryCounts[section.id] ?? 1 : 1,
               });
@@ -941,7 +968,10 @@ export function TambahDataPegawai({ type }: Props) {
                 <Card
                   key={section.id}
                   id={section.id}
-                  className="scroll-mt-6 rounded-lg shadow-none"
+                  className={cn(
+                    "scroll-mt-6 rounded-lg shadow-none",
+                    !isActive && "hidden",
+                  )}
                 >
                   <CardHeader className="gap-3 border-b">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -984,7 +1014,7 @@ export function TambahDataPegawai({ type }: Props) {
 
                         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                           {section.fields.map((field) =>
-                            renderField(section, field, entryIndex),
+                            renderField(section, field, isActive, entryIndex),
                           )}
                         </div>
                       </div>
@@ -1001,6 +1031,36 @@ export function TambahDataPegawai({ type }: Props) {
                         {section.addLabel}
                       </Button>
                     )}
+
+                    <Separator />
+
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <p className="text-sm text-muted-foreground">
+                        Section {activeSectionIndex + 1} dari {sections.length}:{" "}
+                        {activeSection.title}
+                      </p>
+
+                      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          disabled={isFirstSection}
+                          onClick={goToPreviousSection}
+                        >
+                          <ChevronLeftIcon data-icon="inline-start" />
+                          Balik
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          disabled={isLastSection}
+                          onClick={goToNextSection}
+                        >
+                          Next
+                          <ChevronRightIcon data-icon="inline-end" />
+                        </Button>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               );
