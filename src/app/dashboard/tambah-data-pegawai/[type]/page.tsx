@@ -1,8 +1,5 @@
-import { TambahDataPegawai } from "@/components/pages/tambah-data";
-import {
-  EMPLOYEE_MODULES,
-  type EmployeeModule,
-} from "@/constants/employee";
+import { TambahDataPegawai } from "@/components/pages/tambah-data-pegawai";
+import { EMPLOYEE_MODULES, type EmployeeModule } from "@/constants/employee";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 

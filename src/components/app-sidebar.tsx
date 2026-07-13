@@ -140,27 +140,27 @@ const data = {
       items: [
         {
           title: "Data Pengguna",
-          url: "#",
+          url: "/dashboard/master-data/pengguna",
         },
         {
           title: "Data Role Pengguna",
-          url: "#",
+          url: "/dashboard/master-data/role-pengguna",
         },
         {
           title: "Data Jabatan",
-          url: "#",
+          url: "/dashboard/master-data/jabatan",
         },
         {
           title: "Data Golongan",
-          url: "#",
+          url: "/dashboard/master-data/golongan",
         },
         {
           title: "Data Instansi",
-          url: "#",
+          url: "/dashboard/master-data/instansi",
         },
         {
           title: "Data Jenis Pegawai",
-          url: "#",
+          url: "/dashboard/master-data/jenis-pegawai",
         },
       ],
     },
