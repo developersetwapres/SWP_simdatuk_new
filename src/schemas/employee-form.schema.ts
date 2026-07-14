@@ -1,5 +1,60 @@
 import { z } from "zod";
 
+const educationSchema = z.object({
+  education_level_id: z.coerce.number().optional(),
+  education_name: z.string().optional(),
+  institution_name: z.string().optional(),
+  major: z.string().optional(),
+  graduation_year: z.coerce.number().optional(),
+  diploma_file: z.any().optional(),
+});
+
+const familySchema = z.object({
+  name: z.string().optional(),
+  relationship: z.string().optional(),
+  gender: z.coerce.number().optional(),
+  birth_place: z.string().optional(),
+  birth_date: z.string().optional(),
+  education: z.string().optional(),
+  occupation: z.string().optional(),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+});
+
+const leaveSchema = z.object({
+  leave_type: z.string().optional(),
+  start_date: z.string().optional(),
+  end_date: z.string().optional(),
+  letter_number: z.string().optional(),
+  description: z.string().optional(),
+  attachment: z.any().optional(),
+});
+
+const assessmentSchema = z.object({
+  assessment_date: z.string().optional(),
+  organizer: z.string().optional(),
+  result: z.string().optional(),
+  attachment: z.any().optional(),
+});
+
+const competencySchema = z.object({
+  competency_date: z.string().optional(),
+  organizer: z.string().optional(),
+  result: z.string().optional(),
+  attachment: z.any().optional(),
+});
+
+const talentSchema = z.object({
+  talent_date: z.string().optional(),
+  organizer: z.string().optional(),
+  result: z.string().optional(),
+  attachment: z.any().optional(),
+});
+
+const noteSchema = z.object({
+  note: z.string().optional(),
+});
+
 export const employeeFormSchema = z.object({
   /* -------------------------------------------------------------------------- */
   /*                               Data Pribadi                                 */
@@ -46,7 +101,7 @@ export const employeeFormSchema = z.object({
   postal_code: z.string().optional(),
 
   /* -------------------------------------------------------------------------- */
-  /*                                Kepegawaian                                 */
+  /*                              Kepegawaian                                   */
   /* -------------------------------------------------------------------------- */
 
   institution_id: z.coerce.number().optional(),
@@ -76,58 +131,46 @@ export const employeeFormSchema = z.object({
   status: z.coerce.number().optional(),
 
   /* -------------------------------------------------------------------------- */
-  /*                                Pendidikan                                  */
+  /*                           Riwayat Pendidikan                               */
   /* -------------------------------------------------------------------------- */
 
-  education_level_id: z.coerce.number().optional(),
-
-  education_name: z.string().optional(),
-
-  major: z.string().optional(),
-
-  graduation_year: z.coerce.number().optional(),
-
-  institution_name: z.string().optional(),
+  educations: z.array(educationSchema).default([]),
 
   /* -------------------------------------------------------------------------- */
-  /*                                  Keluarga                                  */
+  /*                                Keluarga                                    */
   /* -------------------------------------------------------------------------- */
 
-  spouse_name: z.string().optional(),
-
-  spouse_birth_date: z.string().optional(),
-
-  children: z.array(z.any()).optional(),
+  families: z.array(familySchema).default([]),
 
   /* -------------------------------------------------------------------------- */
-  /*                               Riwayat Cuti                                 */
+  /*                                  Cuti                                      */
   /* -------------------------------------------------------------------------- */
 
-  leaves: z.array(z.any()).optional(),
+  leaves: z.array(leaveSchema).default([]),
 
   /* -------------------------------------------------------------------------- */
-  /*                               Assessment                                   */
+  /*                              Assessment                                    */
   /* -------------------------------------------------------------------------- */
 
-  assessments: z.array(z.any()).optional(),
+  assessments: z.array(assessmentSchema).default([]),
 
   /* -------------------------------------------------------------------------- */
-  /*                               Kompetensi                                   */
+  /*                           Uji Kompetensi                                   */
   /* -------------------------------------------------------------------------- */
 
-  competencies: z.array(z.any()).optional(),
+  competencies: z.array(competencySchema).default([]),
 
   /* -------------------------------------------------------------------------- */
-  /*                                  Talenta                                   */
+  /*                              Talent Pool                                   */
   /* -------------------------------------------------------------------------- */
 
-  talents: z.array(z.any()).optional(),
+  talents: z.array(talentSchema).default([]),
 
   /* -------------------------------------------------------------------------- */
-  /*                                  Catatan                                   */
+  /*                                Catatan                                     */
   /* -------------------------------------------------------------------------- */
 
-  notes: z.string().optional(),
+  notes: z.array(noteSchema).default([]),
 });
 
 export type EmployeeFormValues = z.infer<typeof employeeFormSchema>;
