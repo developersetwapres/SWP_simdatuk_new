@@ -2,20 +2,18 @@
 
 import { useMemo, useState } from "react";
 
-const TOTAL_SECTION = 9;
-
-export function useEmployeeSection() {
+export function useEmployeeSection(totalSection: number) {
   const [active, setActive] = useState(0);
 
   function goTo(index: number) {
-    if (index < 0 || index >= TOTAL_SECTION) return;
+    if (index < 0 || index >= totalSection) return;
 
     setActive(index);
   }
 
   function next() {
     setActive((prev) => {
-      if (prev >= TOTAL_SECTION - 1) return prev;
+      if (prev >= totalSection - 1) return prev;
 
       return prev + 1;
     });
@@ -31,23 +29,25 @@ export function useEmployeeSection() {
 
   const canPrevious = useMemo(() => active > 0, [active]);
 
-  const canNext = useMemo(() => active < TOTAL_SECTION - 1, [active]);
+  const canNext = useMemo(
+    () => active < totalSection - 1,
+    [active, totalSection],
+  );
 
   const isFirst = useMemo(() => active === 0, [active]);
 
-  const isLast = useMemo(() => active === TOTAL_SECTION - 1, [active]);
+  const isLast = useMemo(
+    () => active === totalSection - 1,
+    [active, totalSection],
+  );
 
   return {
     active,
-
-    total: TOTAL_SECTION,
-
+    total: totalSection,
     isFirst,
     isLast,
-
     canPrevious,
     canNext,
-
     goTo,
     next,
     previous,
