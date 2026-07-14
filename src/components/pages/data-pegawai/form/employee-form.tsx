@@ -1,81 +1,78 @@
-// src/components/pages/data-pegawai/form/employee-form.tsx
-
 "use client";
 
-import { FormProvider, UseFormReturn } from "react-hook-form";
-
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { FormProvider } from "react-hook-form";
 
 import { EmployeeType } from "@/types/employee-form";
-import { EmployeeFormValues } from "@/schemas/employee-form.schema";
 
-interface EmployeeFormProps {
+import { useEmployeeForm } from "@/hooks/use-employee-form";
+import { useEmployeeLookup } from "@/hooks/use-employee-lookup";
+import { useEmployeeSection } from "@/hooks/use-employee-section";
+
+import { EmployeeFormShell } from "./employee-form-shell";
+import { EmployeeFormHeader } from "./employee-form-header";
+import { EmployeeFormSidebar } from "./employee-form-sidebar";
+import { EmployeeFormFooter } from "./employee-form-footer";
+
+import { IdentitySection } from "./sections/identity";
+
+interface Props {
   type: EmployeeType;
-  mode: "create" | "edit";
-  form: UseFormReturn<EmployeeFormValues>;
-  onSubmit: React.FormEventHandler<HTMLFormElement>;
 }
 
-export function EmployeeForm({
-  type,
-  mode,
-  form,
-  onSubmit,
-}: EmployeeFormProps) {
+export function EmployeeForm({ type }: Props) {
+  const form = useEmployeeForm({ type });
+
+  const lookup = useEmployeeLookup();
+
+  const section = useEmployeeSection();
+
+  async function onSubmit(values: any) {
+    console.log(values);
+  }
+
   return (
     <FormProvider {...form}>
-      <form onSubmit={onSubmit} className="space-y-6">
-        {/* ================= HEADER ================= */}
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <EmployeeFormShell>
+          <EmployeeFormHeader type={type} />
 
-        <Card>
-          <CardContent className="flex items-center justify-between py-6">
-            <div>
-              <h1 className="text-2xl font-semibold">
-                {mode === "create"
-                  ? "Tambah Data Pegawai"
-                  : "Ubah Data Pegawai"}
-              </h1>
+          <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
+            <EmployeeFormSidebar
+              active={section.active}
+              onChange={section.goTo}
+            />
 
-              <p className="text-muted-foreground mt-1 text-sm">
-                Tipe Pegawai :
-                <span className="ml-1 font-medium uppercase">{type}</span>
-              </p>
+            <div className="space-y-6">
+              {section.active === 0 && <IdentitySection lookup={lookup} />}
+
+              {section.active === 1 && <>Employment Section</>}
+
+              {section.active === 2 && <>Education Section</>}
+
+              {section.active === 3 && <>Family Section</>}
+
+              {section.active === 4 && <>Leave Section</>}
+
+              {section.active === 5 && <>Assessment Section</>}
+
+              {section.active === 6 && <>Competency Section</>}
+
+              {section.active === 7 && <>Talent Section</>}
+
+              {section.active === 8 && <>Notes Section</>}
             </div>
+          </div>
 
-            <div className="flex gap-2">
-              <Button type="button" variant="outline">
-                Batal
-              </Button>
-
-              <Button type="submit">
-                {mode === "create" ? "Simpan" : "Perbarui"}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* ================= SECTION ================= */}
-
-        <Card>
-          <CardContent className="space-y-8 py-6">
-            {/* IdentitySection */}
-
-            {/* PositionSection */}
-
-            {/* EducationSection */}
-
-            {/* FamilySection */}
-
-            {/* AssessmentSection */}
-
-            {/* CompetencySection */}
-
-            {/* TalentSection */}
-
-            {/* NoteSection */}
-          </CardContent>
-        </Card>
+          <EmployeeFormFooter
+            active={section.active}
+            total={9}
+            canPrevious={section.canPrevious}
+            canNext={section.canNext}
+            onPrevious={section.previous}
+            onNext={section.next}
+            loading={form.formState.isSubmitting}
+          />
+        </EmployeeFormShell>
       </form>
     </FormProvider>
   );

@@ -1,6 +1,68 @@
 import { z } from "zod";
 
+<<<<<<< HEAD
 const emptyToUndefined = (value: unknown) => (value === "" ? undefined : value);
+=======
+const educationSchema = z.object({
+  education_level_id: z.coerce.number().optional(),
+  education_name: z.string().optional(),
+  institution_name: z.string().optional(),
+  major: z.string().optional(),
+  graduation_year: z.coerce.number().optional(),
+  diploma_file: z.any().optional(),
+});
+
+const familySchema = z.object({
+  name: z.string().optional(),
+  relationship: z.string().optional(),
+  gender: z.coerce.number().optional(),
+  birth_place: z.string().optional(),
+  birth_date: z.string().optional(),
+  education: z.string().optional(),
+  occupation: z.string().optional(),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+});
+
+const leaveSchema = z.object({
+  leave_type: z.string().optional(),
+  start_date: z.string().optional(),
+  end_date: z.string().optional(),
+  letter_number: z.string().optional(),
+  description: z.string().optional(),
+  attachment: z.any().optional(),
+});
+
+const assessmentSchema = z.object({
+  assessment_date: z.string().optional(),
+  organizer: z.string().optional(),
+  result: z.string().optional(),
+  attachment: z.any().optional(),
+});
+
+const competencySchema = z.object({
+  competency_date: z.string().optional(),
+  organizer: z.string().optional(),
+  result: z.string().optional(),
+  attachment: z.any().optional(),
+});
+
+const talentSchema = z.object({
+  talent_date: z.string().optional(),
+  organizer: z.string().optional(),
+  result: z.string().optional(),
+  attachment: z.any().optional(),
+});
+
+const noteSchema = z.object({
+  note: z.string().optional(),
+});
+
+export const employeeFormSchema = z.object({
+  /* -------------------------------------------------------------------------- */
+  /*                               Data Pribadi                                 */
+  /* -------------------------------------------------------------------------- */
+>>>>>>> c0c96133109f2c2e4835cce1b63ffcc2ab4e7580
 
 const optionalString = (max?: number) =>
   z.preprocess(
@@ -177,6 +239,7 @@ export const employeeFormSchema = baseEmployeeSchema.superRefine((value, ctx) =>
       });
     }
 
+<<<<<<< HEAD
     if (!value.office_email) {
       ctx.addIssue({
         code: "custom",
@@ -185,6 +248,85 @@ export const employeeFormSchema = baseEmployeeSchema.superRefine((value, ctx) =>
       });
     }
   }
+=======
+  district_id: z.coerce.number().optional(),
+
+  village_id: z.coerce.number().optional(),
+
+  postal_code: z.string().optional(),
+
+  /* -------------------------------------------------------------------------- */
+  /*                              Kepegawaian                                   */
+  /* -------------------------------------------------------------------------- */
+
+  institution_id: z.coerce.number().optional(),
+
+  group_id: z.coerce.number().optional(),
+
+  employment_type_id: z.coerce.number().optional(),
+
+  position_id: z.coerce.number().optional(),
+
+  echelon_id: z.coerce.number().optional(),
+
+  grade_id: z.coerce.number().optional(),
+
+  grade_effective_date: z.string().optional(),
+
+  position_effective_date: z.string().optional(),
+
+  cpns_date: z.string().optional(),
+
+  pns_date: z.string().optional(),
+
+  pppk_date: z.string().optional(),
+
+  retirement_date: z.string().optional(),
+
+  status: z.coerce.number().optional(),
+
+  /* -------------------------------------------------------------------------- */
+  /*                           Riwayat Pendidikan                               */
+  /* -------------------------------------------------------------------------- */
+
+  educations: z.array(educationSchema).default([]),
+
+  /* -------------------------------------------------------------------------- */
+  /*                                Keluarga                                    */
+  /* -------------------------------------------------------------------------- */
+
+  families: z.array(familySchema).default([]),
+
+  /* -------------------------------------------------------------------------- */
+  /*                                  Cuti                                      */
+  /* -------------------------------------------------------------------------- */
+
+  leaves: z.array(leaveSchema).default([]),
+
+  /* -------------------------------------------------------------------------- */
+  /*                              Assessment                                    */
+  /* -------------------------------------------------------------------------- */
+
+  assessments: z.array(assessmentSchema).default([]),
+
+  /* -------------------------------------------------------------------------- */
+  /*                           Uji Kompetensi                                   */
+  /* -------------------------------------------------------------------------- */
+
+  competencies: z.array(competencySchema).default([]),
+
+  /* -------------------------------------------------------------------------- */
+  /*                              Talent Pool                                   */
+  /* -------------------------------------------------------------------------- */
+
+  talents: z.array(talentSchema).default([]),
+
+  /* -------------------------------------------------------------------------- */
+  /*                                Catatan                                     */
+  /* -------------------------------------------------------------------------- */
+
+  notes: z.array(noteSchema).default([]),
+>>>>>>> c0c96133109f2c2e4835cce1b63ffcc2ab4e7580
 });
 
 export type EmployeeFormValues = z.infer<typeof employeeFormSchema>;
