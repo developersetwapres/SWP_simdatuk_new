@@ -1,133 +1,190 @@
 import { z } from "zod";
 
-export const employeeFormSchema = z.object({
-  /* -------------------------------------------------------------------------- */
-  /*                               Data Pribadi                                 */
-  /* -------------------------------------------------------------------------- */
+const emptyToUndefined = (value: unknown) => (value === "" ? undefined : value);
 
-  photo_profile: z.any().optional(),
+const optionalString = (max?: number) =>
+  z.preprocess(
+    emptyToUndefined,
+    max ? z.string().max(max).optional() : z.string().optional(),
+  );
 
-  employee_type: z.string().min(1),
+const requiredString = (message: string, max = 160) =>
+  z.string().min(1, message).max(max);
 
-  employee_id_number: z.string().optional(),
+const optionalNumber = () =>
+  z.preprocess(emptyToUndefined, z.coerce.number().optional());
 
-  employee_registration_number: z.string().optional(),
+const requiredNumber = (message: string) =>
+  z.preprocess(emptyToUndefined, z.coerce.number({ message }));
 
-  title_prefix: z.string().optional(),
+const optionalDate = () => optionalString();
 
-  name: z.string().min(1, "Nama wajib diisi"),
+const optionalFile = z.any().optional();
 
-  title_suffix: z.string().optional(),
+const educationSchema = z.object({
+  level: optionalNumber(),
+  name: optionalString(160),
+  study_area: optionalNumber(),
+  accreditation: optionalString(30),
+  faculty: optionalString(160),
+  major: optionalString(160),
+  year_of_graduation: optionalString(),
+  description: optionalString(160),
+  degree_document: optionalFile,
+  study_assignment_letter: optionalFile,
+  academic_title_letter: optionalFile,
+});
 
-  gender: z.coerce.number().optional(),
+const familySchema = z.object({
+  card_number: optionalString(21),
+  name: optionalString(160),
+  id_number: optionalString(16),
+  gender: optionalNumber(),
+  religion: optionalNumber(),
+  place_of_birth: optionalString(160),
+  date_of_birth: optionalDate(),
+  name_of_father: optionalString(160),
+  name_of_mother: optionalString(160),
+  relationship_status: optionalNumber(),
+  education: optionalNumber(),
+  occupation: optionalString(160),
+  occupation_description: optionalString(160),
+  marital_status: optionalNumber(),
+  marriage_other_notes: optionalString(),
+  mobile_phone: optionalString(16),
+  sequence_number: optionalNumber(),
+});
 
-  birth_place: z.string().optional(),
+const leaveSchema = z.object({
+  start_date: optionalDate(),
+  end_date: optionalDate(),
+  type: optionalNumber(),
+  number: optionalString(160),
+  description: optionalString(),
+  letter: optionalFile,
+});
 
-  birth_date: z.string().optional(),
+const noteSchema = z.object({
+  description: optionalString(160),
+});
 
-  religion_id: z.coerce.number().optional(),
+const assessmentSchema = z.object({
+  event_date: optionalDate(),
+  point: optionalNumber(),
+  organizer: optionalString(512),
+  assessment_document: optionalFile,
+});
 
-  marital_status: z.string().optional(),
+const competencySchema = z.object({
+  event_date: optionalDate(),
+  point: optionalNumber(),
+  organizer: optionalString(512),
+  competency_document: optionalFile,
+});
 
-  email: z.string().email().optional().or(z.literal("")),
+const talentSchema = z.object({
+  event_date: optionalDate(),
+  point: optionalNumber(),
+  organizer: optionalString(512),
+  talent_document: optionalFile,
+});
 
-  phone: z.string().optional(),
+const baseEmployeeSchema = z.object({
+  photo_profile: optionalFile,
+  name: requiredString("Nama wajib diisi"),
+  title_prefix: optionalString(160),
+  title_suffix: optionalString(160),
+  employee_id_number: requiredString("NIP wajib diisi"),
+  employee_registration_number: optionalString(),
+  place_of_birth: requiredString("Tempat lahir wajib diisi"),
+  date_of_birth: requiredString("Tanggal lahir wajib diisi"),
+  religion: requiredNumber("Agama wajib dipilih"),
+  gender: requiredNumber("Jenis kelamin wajib dipilih"),
+  marital_status: optionalNumber(),
+  marriage_date: optionalDate(),
+  marriage_description: optionalString(),
+  employment_type_id: requiredNumber("Jenis pegawai wajib dipilih"),
+  cpns_effective_date: optionalDate(),
+  pns_effective_date: optionalDate(),
+  position_id: optionalNumber(),
+  position_effective_date: optionalDate(),
+  grade_id: optionalNumber(),
+  grade_effective_date: optionalDate(),
+  echelon_id: optionalNumber(),
+  echelon_effective_date: optionalDate(),
+  institution_id: optionalNumber(),
+  education_level: requiredNumber("Tingkat pendidikan akhir wajib dipilih"),
+  education_name: optionalString(160),
+  education_year: optionalString(),
+  employee_id_card_number: optionalString(),
+  employee_id_card: optionalFile,
+  karisu_number: optionalString(),
+  id_tax: optionalString(16),
+  employment_status: requiredNumber("Status pegawai wajib dipilih"),
+  family_registration_number: optionalString(16),
+  id_number: requiredString("No NIK wajib diisi", 16),
+  residence_id: optionalNumber(),
+  residence_description: optionalString(),
+  current_address: optionalString(160),
+  home_phone_number: optionalString(),
+  mobile_phone: optionalString(),
+  office_address: optionalString(160),
+  office_phone_number: optionalString(),
+  email: z.preprocess(
+    emptyToUndefined,
+    z.string().email("Format email tidak valid").optional(),
+  ),
+  office_email: z.preprocess(
+    emptyToUndefined,
+    z.string().email("Format email dinas tidak valid").optional(),
+  ),
+  emergency_contact: requiredString("Kontak darurat wajib diisi", 512),
+  description: optionalString(160),
+  type: z.coerce.number().pipe(z.union([z.literal(1), z.literal(2), z.literal(3)])),
+  quit_date: optionalDate(),
+  educations: z.array(educationSchema).default([]),
+  families: z.array(familySchema).default([]),
+  leaves: z.array(leaveSchema).default([]),
+  notes: z.array(noteSchema).default([]),
+  assessments: z.array(assessmentSchema).default([]),
+  competencies: z.array(competencySchema).default([]),
+  talents: z.array(talentSchema).default([]),
+});
 
-  address: z.string().optional(),
+export const employeeFormSchema = baseEmployeeSchema.superRefine((value, ctx) => {
+  if (value.type === 1) {
+    if (!value.cpns_effective_date) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["cpns_effective_date"],
+        message: "TMT CPNS wajib diisi",
+      });
+    }
 
-  province_id: z.coerce.number().optional(),
+    if (!value.grade_id) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["grade_id"],
+        message: "Pangkat / Golongan wajib dipilih",
+      });
+    }
 
-  city_id: z.coerce.number().optional(),
+    if (!value.grade_effective_date) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["grade_effective_date"],
+        message: "TMT Pangkat / Golongan wajib diisi",
+      });
+    }
 
-  district_id: z.coerce.number().optional(),
-
-  village_id: z.coerce.number().optional(),
-
-  postal_code: z.string().optional(),
-
-  /* -------------------------------------------------------------------------- */
-  /*                                Kepegawaian                                 */
-  /* -------------------------------------------------------------------------- */
-
-  institution_id: z.coerce.number().optional(),
-
-  group_id: z.coerce.number().optional(),
-
-  employment_type_id: z.coerce.number().optional(),
-
-  position_id: z.coerce.number().optional(),
-
-  echelon_id: z.coerce.number().optional(),
-
-  grade_id: z.coerce.number().optional(),
-
-  grade_effective_date: z.string().optional(),
-
-  position_effective_date: z.string().optional(),
-
-  cpns_date: z.string().optional(),
-
-  pns_date: z.string().optional(),
-
-  pppk_date: z.string().optional(),
-
-  retirement_date: z.string().optional(),
-
-  status: z.coerce.number().optional(),
-
-  /* -------------------------------------------------------------------------- */
-  /*                                Pendidikan                                  */
-  /* -------------------------------------------------------------------------- */
-
-  education_level_id: z.coerce.number().optional(),
-
-  education_name: z.string().optional(),
-
-  major: z.string().optional(),
-
-  graduation_year: z.coerce.number().optional(),
-
-  institution_name: z.string().optional(),
-
-  /* -------------------------------------------------------------------------- */
-  /*                                  Keluarga                                  */
-  /* -------------------------------------------------------------------------- */
-
-  spouse_name: z.string().optional(),
-
-  spouse_birth_date: z.string().optional(),
-
-  children: z.array(z.any()).optional(),
-
-  /* -------------------------------------------------------------------------- */
-  /*                               Riwayat Cuti                                 */
-  /* -------------------------------------------------------------------------- */
-
-  leaves: z.array(z.any()).optional(),
-
-  /* -------------------------------------------------------------------------- */
-  /*                               Assessment                                   */
-  /* -------------------------------------------------------------------------- */
-
-  assessments: z.array(z.any()).optional(),
-
-  /* -------------------------------------------------------------------------- */
-  /*                               Kompetensi                                   */
-  /* -------------------------------------------------------------------------- */
-
-  competencies: z.array(z.any()).optional(),
-
-  /* -------------------------------------------------------------------------- */
-  /*                                  Talenta                                   */
-  /* -------------------------------------------------------------------------- */
-
-  talents: z.array(z.any()).optional(),
-
-  /* -------------------------------------------------------------------------- */
-  /*                                  Catatan                                   */
-  /* -------------------------------------------------------------------------- */
-
-  notes: z.string().optional(),
+    if (!value.office_email) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["office_email"],
+        message: "Email dinas wajib diisi",
+      });
+    }
+  }
 });
 
 export type EmployeeFormValues = z.infer<typeof employeeFormSchema>;

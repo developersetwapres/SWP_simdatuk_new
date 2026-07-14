@@ -19,6 +19,16 @@ export const getEmployees = async (
   return data;
 };
 
+export const createEmployee = async (payload: FormData) => {
+  const { data } = await api.post("/employees", payload, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return data;
+};
+
 /* -------------------------------------------------------------------------- */
 /*                               Master / Lookup                              */
 /* -------------------------------------------------------------------------- */

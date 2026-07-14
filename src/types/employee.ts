@@ -19,6 +19,20 @@ export interface EmployeeResponse {
   data: Employee[];
 }
 
+export interface LookupItem {
+  id: number;
+  name: string;
+  code?: string;
+  type?: number | string;
+  status?: number | boolean;
+}
+
+export interface LookupResponse {
+  code: number;
+  message: string;
+  data: LookupItem[];
+}
+
 export interface EmployeeFilter {
   page?: number;
   type?: number;
