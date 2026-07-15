@@ -1,3 +1,5 @@
+import { Pagination } from "./pagination";
+
 export interface Employee {
   id: number;
   photo_profile: string | null;
@@ -17,6 +19,7 @@ export interface EmployeeResponse {
   code: number;
   message: string;
   data: Employee[];
+  pagination: Pagination;
 }
 
 export interface LookupItem {

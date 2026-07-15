@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Eye, MoreHorizontal } from "lucide-react";
 
+import { Employee } from "@/types/employee";
 import { EmployeeModule } from "@/constants/employee";
 
 import { getEmployeeColumns } from "@/components/pages/data-pegawai/employee-columns";
@@ -25,11 +26,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-interface Employee {
-  id: number;
-  [key: string]: unknown;
-}
 
 interface Props {
   module: EmployeeModule;

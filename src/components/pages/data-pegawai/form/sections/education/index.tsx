@@ -8,6 +8,7 @@ import { EmployeeFormValues } from "@/schemas/employee-form.schema";
 import { useEmployeeLookup } from "@/hooks/use-employee-lookup";
 import { emptyEducation } from "@/hooks/use-employee-form";
 
+import { YEAR_OPTIONS } from "@/constants/employee-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 

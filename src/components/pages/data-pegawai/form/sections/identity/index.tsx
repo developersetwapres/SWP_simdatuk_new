@@ -84,14 +84,14 @@ export function IdentitySection({ lookup }: IdentitySectionProps) {
 
       <FormInput
         control={form.control}
-        name="birth_place"
+        name="place_of_birth"
         label="Tempat Lahir"
         placeholder="Masukkan tempat lahir"
       />
 
       <FormDate
         control={form.control}
-        name="birth_date"
+        name="date_of_birth"
         label="Tanggal Lahir"
       />
 
@@ -105,10 +105,9 @@ export function IdentitySection({ lookup }: IdentitySectionProps) {
 
       <FormSelect
         control={form.control}
-        name="religion_id"
+        name="religion"
         label="Agama"
         placeholder="Pilih agama"
-        loading={lookup.loading}
         options={religionOptions}
       />
 
@@ -130,7 +129,7 @@ export function IdentitySection({ lookup }: IdentitySectionProps) {
 
       <FormInput
         control={form.control}
-        name="phone"
+        name="mobile_phone"
         label="Nomor Handphone"
         placeholder="08xxxxxxxxxx"
       />

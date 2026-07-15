@@ -106,7 +106,6 @@ export function IdentityFields() {
         name="religion"
         label="Agama"
         placeholder="Pilih agama"
-        loading={loadingLookup}
         options={religionOptions}
       />
 

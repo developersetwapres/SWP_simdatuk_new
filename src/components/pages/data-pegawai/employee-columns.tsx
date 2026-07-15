@@ -3,20 +3,7 @@
 import Image from "next/image";
 
 import { EmployeeModule } from "@/constants/employee";
-
-interface Employee {
-  id: number;
-  photo_profile?: string | null;
-  name?: string | null;
-  employee_id_number?: string | null;
-  employee_registration_number?: string | null;
-  grade_name?: string | null;
-  position_name?: string | null;
-  employment_type?: string | null;
-  description?: string | null;
-
-  [key: string]: unknown;
-}
+import { Employee } from "@/types/employee";
 
 export interface EmployeeColumn {
   header: string;
