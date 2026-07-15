@@ -73,58 +73,50 @@ export async function getEmploymentTypes(params?: Record<string, unknown>) {
   return data;
 }
 
-export async function getReligions(params?: Record<string, unknown>) {
-  const { data } = await api.get<LookupResponse>("/religions", {
-    params,
-  });
+// export async function getEducationLevels(params?: Record<string, unknown>) {
+//   const { data } = await api.get<LookupResponse>("/education-levels", {
+//     params,
+//   });
 
-  return data;
-}
+//   return data;
+// }
 
-export async function getEducationLevels(params?: Record<string, unknown>) {
-  const { data } = await api.get<LookupResponse>("/education-levels", {
-    params,
-  });
+// export async function getMaritalStatuses(params?: Record<string, unknown>) {
+//   const { data } = await api.get<LookupResponse>("/marital-statuses", {
+//     params,
+//   });
 
-  return data;
-}
+//   return data;
+// }
 
-export async function getMaritalStatuses(params?: Record<string, unknown>) {
-  const { data } = await api.get<LookupResponse>("/marital-statuses", {
-    params,
-  });
+// export async function getProvinces(params?: Record<string, unknown>) {
+//   const { data } = await api.get<LookupResponse>("/provinces", {
+//     params,
+//   });
 
-  return data;
-}
+//   return data;
+// }
 
-export async function getProvinces(params?: Record<string, unknown>) {
-  const { data } = await api.get<LookupResponse>("/provinces", {
-    params,
-  });
+// export async function getCities(params?: Record<string, unknown>) {
+//   const { data } = await api.get<LookupResponse>("/cities", {
+//     params,
+//   });
 
-  return data;
-}
+//   return data;
+// }
 
-export async function getCities(params?: Record<string, unknown>) {
-  const { data } = await api.get<LookupResponse>("/cities", {
-    params,
-  });
+// export async function getDistricts(params?: Record<string, unknown>) {
+//   const { data } = await api.get<LookupResponse>("/districts", {
+//     params,
+//   });
 
-  return data;
-}
+//   return data;
+// }
 
-export async function getDistricts(params?: Record<string, unknown>) {
-  const { data } = await api.get<LookupResponse>("/districts", {
-    params,
-  });
+// export async function getVillages(params?: Record<string, unknown>) {
+//   const { data } = await api.get<LookupResponse>("/villages", {
+//     params,
+//   });
 
-  return data;
-}
-
-export async function getVillages(params?: Record<string, unknown>) {
-  const { data } = await api.get<LookupResponse>("/villages", {
-    params,
-  });
-
-  return data;
-}
+//   return data;
+// }

@@ -3,17 +3,16 @@
 import { useEffect, useState } from "react";
 
 import {
-  getCities,
-  getDistricts,
-  getEducationLevels,
+  // getCities,
+  // getDistricts,
+  // getEducationLevels,
   getEmploymentTypes,
   getGrades,
   getInstitutions,
-  getMaritalStatuses,
+  // getMaritalStatuses,
   getPositions,
-  getProvinces,
-  getReligions,
-  getVillages,
+  // getProvinces,
+  // getVillages,
   getWorkUnits,
 } from "@/services/employee.service";
 
@@ -25,7 +24,6 @@ interface LookupOption {
 export function useEmployeeLookup() {
   const [loading, setLoading] = useState(true);
 
-  const [religions, setReligions] = useState<LookupOption[]>([]);
   const [institutions, setInstitutions] = useState<LookupOption[]>([]);
   const [positions, setPositions] = useState<LookupOption[]>([]);
   const [workUnits, setWorkUnits] = useState<LookupOption[]>([]);
@@ -47,36 +45,32 @@ export function useEmployeeLookup() {
       setLoading(true);
 
       const [
-        religionRes,
         institutionRes,
         positionRes,
         workUnitRes,
         gradeRes,
         employmentTypeRes,
-        educationLevelRes,
-        maritalStatusRes,
-        provinceRes,
+        // educationLevelRes,
+        // maritalStatusRes,
+        // provinceRes,
       ] = await Promise.all([
-        getReligions(),
         getInstitutions(),
         getPositions(),
         getWorkUnits(),
         getGrades(),
         getEmploymentTypes(),
-        getEducationLevels(),
-        getMaritalStatuses(),
-        getProvinces(),
+        // getEducationLevels(),
+        // getMaritalStatuses(),
+        // getProvinces(),
       ]);
 
-      setReligions(mapOptions(religionRes.data));
       setInstitutions(mapOptions(institutionRes.data));
       setPositions(mapOptions(positionRes.data));
       setWorkUnits(mapOptions(workUnitRes.data));
       setGrades(mapGradeOptions(gradeRes.data));
       setEmploymentTypes(mapOptions(employmentTypeRes.data));
-      setEducationLevels(mapOptions(educationLevelRes.data));
-      setMaritalStatuses(mapOptions(maritalStatusRes.data));
-      setProvinces(mapOptions(provinceRes.data));
+      // setEducationLevels(mapOptions(educationLevelRes.data));
+      // setMaritalStatuses(mapOptions(maritalStatusRes.data));
     } catch (error) {
       console.error(error);
     } finally {
@@ -84,34 +78,35 @@ export function useEmployeeLookup() {
     }
   }
 
-  async function loadCities(provinceId: number | string) {
-    const res = await getCities({
-      province_id: provinceId,
-    });
+  console.log(employmentTypes);
 
-    setCities(mapOptions(res.data));
-  }
+  // async function loadCities(provinceId: number | string) {
+  //   const res = await getCities({
+  //     province_id: provinceId,
+  //   });
 
-  async function loadDistricts(cityId: number | string) {
-    const res = await getDistricts({
-      city_id: cityId,
-    });
+  //   setCities(mapOptions(res.data));
+  // }
 
-    setDistricts(mapOptions(res.data));
-  }
+  // async function loadDistricts(cityId: number | string) {
+  //   const res = await getDistricts({
+  //     city_id: cityId,
+  //   });
 
-  async function loadVillages(districtId: number | string) {
-    const res = await getVillages({
-      district_id: districtId,
-    });
+  //   setDistricts(mapOptions(res.data));
+  // }
 
-    setVillages(mapOptions(res.data));
-  }
+  // async function loadVillages(districtId: number | string) {
+  //   const res = await getVillages({
+  //     district_id: districtId,
+  //   });
+
+  //   setVillages(mapOptions(res.data));
+  // }
 
   return {
     loading,
 
-    religions,
     institutions,
     positions,
     workUnits,
@@ -124,9 +119,9 @@ export function useEmployeeLookup() {
     districts,
     villages,
 
-    loadCities,
-    loadDistricts,
-    loadVillages,
+    // loadCities,
+    // loadDistricts,
+    // loadVillages,
     reload: loadLookup,
   };
 }

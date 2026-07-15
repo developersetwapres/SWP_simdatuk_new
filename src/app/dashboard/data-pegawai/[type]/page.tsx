@@ -14,7 +14,7 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps) {
-  const type = params.type as EmployeeModule;
+  const { type } = await params;
 
   if (!(type in EMPLOYEE_MODULES)) {
     notFound();
