@@ -1,15 +1,24 @@
 import { DataPegawai } from "@/components/pages/data-pegawai";
+import { EMPLOYEE_MODULES, type EmployeeModule } from "@/constants/employee";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Dashboard",
 };
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ type: string }>;
-}) {
-  const { type } = await params;
+interface PageProps {
+  params: {
+    type: string;
+  };
+}
+
+export default async function Page({ params }: PageProps) {
+  const type = params.type as EmployeeModule;
+
+  if (!(type in EMPLOYEE_MODULES)) {
+    notFound();
+  }
+
   return <DataPegawai type={type} />;
 }

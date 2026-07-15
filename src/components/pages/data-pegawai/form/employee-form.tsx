@@ -12,8 +12,10 @@ import { EmployeeFormShell } from "./employee-form-shell";
 import { EmployeeFormHeader } from "./employee-form-header";
 import { EmployeeFormSidebar } from "./employee-form-sidebar";
 import { EmployeeFormFooter } from "./employee-form-footer";
+import { EmployeeFormSectionCard } from "./employee-form-section";
 
-import { IdentitySection } from "./sections/identity";
+import { EMPLOYEE_MODULES } from "@/constants/employee";
+import { getEmployeeFormSections } from "@/constants/employee-form";
 
 interface Props {
   type: EmployeeType;
@@ -24,53 +26,50 @@ export function EmployeeForm({ type }: Props) {
 
   const lookup = useEmployeeLookup();
 
-  const section = useEmployeeSection();
+  const sections = getEmployeeFormSections(type, lookup);
+
+  const section = useEmployeeSection(sections.length);
 
   async function onSubmit(values: any) {
     console.log(values);
   }
 
+  const config = EMPLOYEE_MODULES[type];
+
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <EmployeeFormShell>
-          <EmployeeFormHeader type={type} />
+          <EmployeeFormHeader
+            title={`Tambah ${config.title}`}
+            employeeType={config.title}
+            totalSections={sections.length}
+          />
 
           <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
             <EmployeeFormSidebar
-              active={section.active}
-              onChange={section.goTo}
+              sections={sections}
+              activeSection={section.active}
+              onChangeSection={section.goTo}
             />
 
             <div className="space-y-6">
-              {section.active === 0 && <IdentitySection lookup={lookup} />}
-
-              {section.active === 1 && <>Employment Section</>}
-
-              {section.active === 2 && <>Education Section</>}
-
-              {section.active === 3 && <>Family Section</>}
-
-              {section.active === 4 && <>Leave Section</>}
-
-              {section.active === 5 && <>Assessment Section</>}
-
-              {section.active === 6 && <>Competency Section</>}
-
-              {section.active === 7 && <>Talent Section</>}
-
-              {section.active === 8 && <>Notes Section</>}
+              <EmployeeFormSectionCard
+                section={sections[section.active]}
+                index={section.active}
+              />
             </div>
           </div>
 
           <EmployeeFormFooter
-            active={section.active}
-            total={9}
-            canPrevious={section.canPrevious}
-            canNext={section.canNext}
+            currentSection={section.active}
+            totalSection={sections.length}
+            sectionTitle={sections[section.active]?.title ?? ""}
+            isFirstSection={section.isFirst}
+            isLastSection={section.isLast}
+            isSubmitting={form.formState.isSubmitting}
             onPrevious={section.previous}
             onNext={section.next}
-            loading={form.formState.isSubmitting}
           />
         </EmployeeFormShell>
       </form>

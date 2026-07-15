@@ -6,6 +6,7 @@ import { Plus, Trash2 } from "lucide-react";
 import { EmployeeFormValues } from "@/schemas/employee-form.schema";
 
 import { useEmployeeLookup } from "@/hooks/use-employee-lookup";
+import { emptyEducation } from "@/hooks/use-employee-form";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -29,19 +30,7 @@ export function EducationSection() {
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Riwayat Pendidikan</CardTitle>
 
-        <Button
-          type="button"
-          onClick={() =>
-            append({
-              education_level_id: undefined,
-              institution_name: "",
-              major: "",
-              graduation_year: undefined,
-              education_name: "",
-              diploma_file: undefined,
-            })
-          }
-        >
+        <Button type="button" onClick={() => append(emptyEducation)}>
           <Plus className="mr-2 h-4 w-4" />
           Tambah Pendidikan
         </Button>
@@ -74,41 +63,35 @@ export function EducationSection() {
             <CardContent>
               <div className="grid gap-5 md:grid-cols-2">
                 <FormSelect
-                  control={form.control}
-                  name={`educations.${index}.education_level_id`}
+                  name={`educations.${index}.level`}
                   label="Jenjang Pendidikan"
                   options={educationLevels}
                 />
 
                 <FormInput
-                  control={form.control}
-                  name={`educations.${index}.education_name`}
+                  name={`educations.${index}.name`}
                   label="Nama Pendidikan"
                 />
 
                 <FormInput
-                  control={form.control}
-                  name={`educations.${index}.institution_name`}
-                  label="Universitas / Sekolah"
+                  name={`educations.${index}.faculty`}
+                  label="Fakultas / Sekolah"
                 />
 
                 <FormInput
-                  control={form.control}
                   name={`educations.${index}.major`}
                   label="Jurusan"
                 />
 
-                <FormInput
-                  control={form.control}
-                  name={`educations.${index}.graduation_year`}
+                <FormSelect
+                  name={`educations.${index}.year_of_graduation`}
                   label="Tahun Lulus"
-                  type="number"
+                  options={YEAR_OPTIONS}
                 />
 
                 <div className="md:col-span-2">
                   <FormUpload
-                    control={form.control}
-                    name={`educations.${index}.diploma_file`}
+                    name={`educations.${index}.degree_document`}
                     label="Upload Ijazah"
                   />
                 </div>
