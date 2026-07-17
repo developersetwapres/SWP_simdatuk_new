@@ -10,6 +10,7 @@ import { EmployeeType } from "@/types/employee-form";
 import { useEmployeeForm } from "@/hooks/use-employee-form";
 import { useEmployeeLookup } from "@/hooks/use-employee-lookup";
 import { useEmployeeSection } from "@/hooks/use-employee-section";
+import { useEmployeeDummy } from "@/hooks/use-employee-dummy";
 
 import { EmployeeFormShell } from "./employee-form-shell";
 import { EmployeeFormHeader } from "./employee-form-header";
@@ -31,6 +32,7 @@ export function EmployeeForm({ type }: Props) {
   const form = useEmployeeForm({ type });
 
   const lookup = useEmployeeLookup();
+  const dummy = useEmployeeDummy(form);
 
   const sections = getEmployeeFormSections(type, lookup);
 
@@ -58,6 +60,15 @@ export function EmployeeForm({ type }: Props) {
     [router],
   );
 
+  const handleFillDummy = useCallback(() => {
+    dummy.fillDummy(type, {
+      employmentTypeIds: lookup.employmentTypes.map((o) => Number(o.value)),
+      positionIds: lookup.positions.map((o) => Number(o.value)),
+      gradeIds: lookup.grades.map((o) => Number(o.value)),
+      institutionIds: lookup.institutions.map((o) => Number(o.value)),
+    });
+  }, [dummy, type, lookup]);
+
   const config = EMPLOYEE_MODULES[type];
 
   return (
@@ -68,6 +79,7 @@ export function EmployeeForm({ type }: Props) {
             title={`Tambah ${config.title}`}
             employeeType={config.title}
             totalSections={sections.length}
+            onFillDummy={handleFillDummy}
           />
 
           <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
