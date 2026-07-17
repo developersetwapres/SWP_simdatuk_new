@@ -20,5 +20,7 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
 
+  console.log(type);
+
   return <DataPegawai type={type} />;
 }
