@@ -47,7 +47,7 @@ export function EmployeeForm({ type }: Props) {
         await createEmployee(payload);
 
         toast.success("Pegawai berhasil ditambah.", { id: toastId });
-        router.push("/dashboard/data-pegawai");
+        router.push("/dashboard/data-pegawai/" + type);
       } catch (error: any) {
         const message =
           error?.response?.data?.message ??
