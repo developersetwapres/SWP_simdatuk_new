@@ -1,6 +1,9 @@
 "use client";
 
+import { useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { FormProvider } from "react-hook-form";
+import { toast } from "sonner";
 
 import { EmployeeType } from "@/types/employee-form";
 
@@ -16,12 +19,15 @@ import { EmployeeFormSectionCard } from "./employee-form-section";
 
 import { EMPLOYEE_MODULES } from "@/constants/employee";
 import { getEmployeeFormSections } from "@/constants/employee-form";
+import { buildEmployeeFormData } from "@/lib/build-employee-formdata";
+import { createEmployee } from "@/services/employee.service";
 
 interface Props {
   type: EmployeeType;
 }
 
 export function EmployeeForm({ type }: Props) {
+  const router = useRouter();
   const form = useEmployeeForm({ type });
 
   const lookup = useEmployeeLookup();
@@ -30,9 +36,27 @@ export function EmployeeForm({ type }: Props) {
 
   const section = useEmployeeSection(sections.length);
 
-  async function onSubmit(values: any) {
-    console.log(values);
-  }
+  const onSubmit = useCallback(
+    async (values: any) => {
+      const toastId = toast.loading("Menyimpan data pegawai...");
+
+      try {
+        const payload = buildEmployeeFormData(values);
+        await createEmployee(payload);
+
+        toast.success("Pegawai berhasil ditambah.", { id: toastId });
+        router.push("/dashboard/data-pegawai");
+      } catch (error: any) {
+        const message =
+          error?.response?.data?.message ??
+          error?.message ??
+          "Mohon maaf, fitur dalam kendala harap hubungi Tim IT!";
+
+        toast.error(message, { id: toastId });
+      }
+    },
+    [router],
+  );
 
   const config = EMPLOYEE_MODULES[type];
 
