@@ -4,15 +4,18 @@ import {
   BookOpenIcon,
   BriefcaseBusinessIcon,
   SparklesIcon,
+  TestTubesIcon,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 interface EmployeeFormHeaderProps {
   title: string;
   description?: string;
   employeeType: string;
   totalSections: number;
+  onFillDummy?: () => void;
 }
 
 export function EmployeeFormHeader({
@@ -20,6 +23,7 @@ export function EmployeeFormHeader({
   description,
   employeeType,
   totalSections,
+  onFillDummy,
 }: EmployeeFormHeaderProps) {
   return (
     <div className="rounded-xl border overflow-hidden bg-card">
@@ -46,7 +50,19 @@ export function EmployeeFormHeader({
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
+          <div className="flex flex-wrap items-center gap-2">
+            {onFillDummy && (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={onFillDummy}
+              >
+                <TestTubesIcon className="mr-1.5 h-4 w-4" />
+                Buat data dummy
+              </Button>
+            )}
+
             <Badge className="bg-teal-600 text-white hover:bg-teal-600">
               <BriefcaseBusinessIcon className="mr-1 h-4 w-4" />
               {employeeType}

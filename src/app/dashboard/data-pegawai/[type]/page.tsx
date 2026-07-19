@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Page({ params }: TypeApp) {
-  const type = params.type as EmployeeModule;
+  const { type } = await params;
 
   if (!(type in EMPLOYEE_MODULES)) {
     notFound();

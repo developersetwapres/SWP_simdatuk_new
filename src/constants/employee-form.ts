@@ -183,11 +183,15 @@ function dataPegawaiFields(
   const isAsn = type === EMPLOYEE_TYPE.ASN;
   const isNonAsn = type === EMPLOYEE_TYPE.NON_ASN;
   const isOutsourcing = type === EMPLOYEE_TYPE.OUTSOURCING;
+
+  // console.log(lookups);
+
   const employmentTypeLabel = isOutsourcing
     ? "Jenis Outsourcing"
     : isNonAsn
       ? "Jenis Perbantuan"
       : "Jenis Pegawai";
+
   const startDateLabel = isAsn
     ? "TMT CPNS"
     : isNonAsn
@@ -366,7 +370,11 @@ function dataPegawaiFields(
     },
     ...(isAsn
       ? ([
-          { name: "employee_id_card_number", label: "No. Karpeg", type: "text" },
+          {
+            name: "employee_id_card_number",
+            label: "No. Karpeg",
+            type: "text",
+          },
         ] satisfies EmployeeFormField[])
       : []),
     ...(!isOutsourcing

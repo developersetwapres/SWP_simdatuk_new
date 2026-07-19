@@ -1,11 +1,11 @@
-import { EmployeeForm } from "@/components/pages/data-pegawai/form/employee-form";
+import { EmployeeForm } from "@/components/pages/data-pegawai/form/index";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Tambah Data Pegawai | SIMDATUK",
 };
 
-export default async function TambahPage({
+export default async function Page({
   params,
 }: {
   params: Promise<{ type: string }>;

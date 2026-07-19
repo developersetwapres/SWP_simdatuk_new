@@ -42,16 +42,18 @@ interface EmployeeFormSectionCardProps {
   index: number;
 }
 
-const emptyRepeatableValue: Record<EmployeeArrayFieldName, Record<string, unknown>> =
-  {
-    assessments: emptyAssessment,
-    competencies: emptyCompetency,
-    educations: emptyEducation,
-    families: emptyFamily,
-    leaves: emptyLeave,
-    notes: emptyNote,
-    talents: emptyTalent,
-  };
+const emptyRepeatableValue: Record<
+  EmployeeArrayFieldName,
+  Record<string, unknown>
+> = {
+  assessments: emptyAssessment,
+  competencies: emptyCompetency,
+  educations: emptyEducation,
+  families: emptyFamily,
+  leaves: emptyLeave,
+  notes: emptyNote,
+  talents: emptyTalent,
+};
 
 export function EmployeeFormSectionCard({
   section,
@@ -96,7 +98,11 @@ export function EmployeeFormSectionCard({
   );
 }
 
-function RepeatableSectionFields({ section }: { section: EmployeeFormSection }) {
+function RepeatableSectionFields({
+  section,
+}: {
+  section: EmployeeFormSection;
+}) {
   const form = useFormContext<EmployeeFormValues>();
   const repeatable = section.repeatable;
   const { fields, append, remove } = useFieldArray({
