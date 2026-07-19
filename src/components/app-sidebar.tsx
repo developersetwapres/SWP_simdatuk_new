@@ -23,7 +23,6 @@ import {
   Download,
 } from "lucide-react";
 
-import { FrameIcon, PieChartIcon, MapIcon } from "lucide-react";
 import Image from "next/image";
 
 // This is sample data.
@@ -58,16 +57,16 @@ const data = {
           url: "/dashboard/rekapitulasi/pegawai-outsourcing",
         },
         {
+          title: "Promosi Pegawai",
+          url: "/dashboard/rekapitulasi/promosi-pegawai",
+        },
+        {
           title: "Peta Jabatan",
-          url: "/dashboard/rekapitulasi/peta-jabatani",
+          url: "/dashboard/rekapitulasi/peta-jabatan",
         },
         {
           title: "Bandingkan Pegawai",
           url: "/dashboard/rekapitulasi/bandingkan-pegawai",
-        },
-        {
-          title: "Promosi Pegawai",
-          url: "/dashboard/rekapitulasi/promosi-pegawai",
         },
       ],
     },

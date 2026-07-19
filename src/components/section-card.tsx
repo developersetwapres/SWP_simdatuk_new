@@ -25,8 +25,6 @@ export function SectionCard({
   className,
   data,
 }: SectionCardProps) {
-  console.log(data);
-
   return (
     <Card
       className={cn(
