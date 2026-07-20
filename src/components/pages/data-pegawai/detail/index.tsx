@@ -41,8 +41,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface DetailPegawaiProps {
   id: string;
@@ -82,6 +89,23 @@ const fieldAliases: Record<string, string[]> = {
   position_id: ["position_name", "position_merged", "position_id"],
   residence_id: ["residence_name", "residence", "residence_id"],
 };
+
+const headerFieldNames = new Set([
+  "photo_profile",
+  "name",
+  "title_prefix",
+  "title_suffix",
+  "employee_id_number",
+  "employee_registration_number",
+  "employment_type_id",
+  "grade_id",
+  "position_id",
+  "employment_status",
+  "email",
+  "office_email",
+  "mobile_phone",
+  "type",
+]);
 
 export function DetailPegawai({ id, type }: DetailPegawaiProps) {
   const config = EMPLOYEE_MODULES[type];
@@ -247,8 +271,8 @@ export function DetailPegawai({ id, type }: DetailPegawaiProps) {
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
-        <Card className="h-fit rounded-lg bg-muted/30 shadow-none lg:sticky lg:top-6">
+      <div className="grid items-start gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
+        <Card className="h-fit rounded-lg bg-muted/30 shadow-none lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto">
           <CardHeader>
             <CardTitle className="text-sm">Navigasi Section</CardTitle>
             <CardDescription>
@@ -344,23 +368,19 @@ function EmployeeDetailSectionCard({
       </CardHeader>
 
       <CardContent className="space-y-5">
-        {section.repeatable ? (
+        {section.id === "data-pegawai" ? (
+          <DetailFieldGrid
+            fields={getDisplayFields(section)}
+            record={employee}
+          />
+        ) : section.repeatable ? (
           items.length > 0 ? (
-            items.map((item, itemIndex) => (
-              <div key={itemIndex} className="space-y-4 rounded-lg border p-4">
-                <div className="flex items-center gap-3">
-                  <Badge variant="secondary">Data {itemIndex + 1}</Badge>
-                  <Separator className="flex-1" />
-                </div>
-
-                <DetailFieldGrid fields={section.fields} record={item} />
-              </div>
-            ))
+            <DetailDataTable fields={section.fields} records={items} />
           ) : (
             <EmptySectionState title={section.title} />
           )
         ) : (
-          <DetailFieldGrid fields={section.fields} record={employee} />
+          <DetailDataTable fields={section.fields} records={[employee]} />
         )}
       </CardContent>
     </Card>
@@ -415,6 +435,55 @@ function DetailField({
           {value || "-"}
         </p>
       )}
+    </div>
+  );
+}
+
+function DetailDataTable({
+  fields,
+  records,
+}: {
+  fields: EmployeeFormField[];
+  records: EmployeeDetail[];
+}) {
+  return (
+    <div className="overflow-hidden rounded-lg border bg-background">
+      <Table>
+        <TableHeader className="bg-muted/60">
+          <TableRow className="hover:bg-transparent">
+            <TableHead className="w-14 text-center">No</TableHead>
+            {fields.map((field) => (
+              <TableHead key={field.name} className="min-w-44">
+                {field.label}
+              </TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+
+        <TableBody>
+          {records.map((record, index) => (
+            <TableRow key={index}>
+              <TableCell className="text-center text-muted-foreground">
+                {index + 1}
+              </TableCell>
+              {fields.map((field) => (
+                <TableCell
+                  key={field.name}
+                  className="max-w-72 whitespace-normal align-top leading-6"
+                >
+                  {field.type === "file" ? (
+                    <FileValue value={pickFileValue(record, field.name)} />
+                  ) : (
+                    <span className="font-medium">
+                      {resolveFieldDisplay(record, field) || "-"}
+                    </span>
+                  )}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }
@@ -517,6 +586,29 @@ function DetailPegawaiSkeleton() {
   );
 }
 
+function withoutHeaderFields(fields: EmployeeFormField[]) {
+  return fields.filter((field) => !headerFieldNames.has(field.name));
+}
+
+function getDisplayFields(section: EmployeeFormSection) {
+  if (section.id !== "data-pegawai") return section.fields;
+
+  return withoutHeaderFields(section.fields);
+}
+
+function getDisplayFieldCount(
+  record: EmployeeDetail,
+  section: EmployeeFormSection,
+) {
+  return getDisplayFields(section).filter((field) =>
+    hasDisplayValue(
+      field.type === "file"
+        ? pickFileValue(record, field.name)
+        : resolveRawFieldValue(record, field.name),
+    ),
+  ).length;
+}
+
 function unwrapEmployeeDetail(value: unknown): EmployeeDetail | null {
   if (!isRecord(value)) return null;
 
@@ -551,15 +643,10 @@ function sectionCountLabel(
     return String(getRepeatableItems(employee, section.repeatable.name).length);
   }
 
-  const filled = section.fields.filter((field) =>
-    hasDisplayValue(
-      field.type === "file"
-        ? pickFileValue(employee, field.name)
-        : resolveRawFieldValue(employee, field.name),
-    ),
-  ).length;
+  const fields = getDisplayFields(section);
+  const filled = getDisplayFieldCount(employee, section);
 
-  return `${filled}/${section.fields.length}`;
+  return `${filled}/${fields.length}`;
 }
 
 function resolveFieldDisplay(
