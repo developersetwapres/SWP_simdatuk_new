@@ -29,6 +29,12 @@ export const createEmployee = async (payload: FormData) => {
   return data;
 };
 
+export const detailEmployee = async (id: string | number) => {
+  const { data } = await api.get("/employees/" + id);
+
+  return data;
+};
+
 /* -------------------------------------------------------------------------- */
 /*                               Master / Lookup                              */
 /* -------------------------------------------------------------------------- */

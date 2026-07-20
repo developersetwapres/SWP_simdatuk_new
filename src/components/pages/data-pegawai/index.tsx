@@ -16,8 +16,6 @@ interface Props {
 export function DataPegawai({ type }: Props) {
   const config = EMPLOYEE_MODULES[type];
 
-  console.log(type);
-
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
 
