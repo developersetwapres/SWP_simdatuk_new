@@ -272,7 +272,7 @@ export function DetailPegawai({ id, type }: DetailPegawaiProps) {
       </div>
 
       <div className="grid items-start gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
-        <Card className="h-fit rounded-lg bg-muted/30 shadow-none lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto">
+        <Card className="h-fit rounded-lg bg-muted/30 shadow-none lg:sticky lg:top-6 lg:max-h-[calc(100dvh-5.5rem)] lg:overflow-y-auto">
           <CardHeader>
             <CardTitle className="text-sm">Navigasi Section</CardTitle>
             <CardDescription>
