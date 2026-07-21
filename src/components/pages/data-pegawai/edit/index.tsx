@@ -1,10 +1,4 @@
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Edit Pegawai",
-};
-
-export default function Page() {
+export function EditPegawai({ id, type }) {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-semibold">Edit Pegawai</h1>
