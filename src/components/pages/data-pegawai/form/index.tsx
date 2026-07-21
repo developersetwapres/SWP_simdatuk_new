@@ -28,10 +28,12 @@ interface Props {
 }
 
 export function EmployeeForm({ type }: Props) {
+  const config = EMPLOYEE_MODULES[type];
+
   const router = useRouter();
   const form = useEmployeeForm({ type });
 
-  const lookup = useEmployeeLookup();
+  const lookup = useEmployeeLookup(config.type);
   const dummy = useEmployeeDummy(form);
 
   const sections = getEmployeeFormSections(type, lookup);
@@ -68,8 +70,6 @@ export function EmployeeForm({ type }: Props) {
       institutionIds: lookup.institutions.map((o) => Number(o.value)),
     });
   }, [dummy, type, lookup]);
-
-  const config = EMPLOYEE_MODULES[type];
 
   return (
     <FormProvider {...form}>
