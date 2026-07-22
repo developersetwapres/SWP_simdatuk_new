@@ -6,11 +6,10 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 
 interface PageHeaderProps {
+  type: string;
   title: string;
   description?: string;
-
   total?: number;
-
   search?: string;
   onSearch?: (value: string) => void;
   searchPlaceholder?: string;
@@ -19,6 +18,7 @@ interface PageHeaderProps {
 }
 
 export function PageHeader({
+  type,
   title,
   total,
   description,
@@ -60,7 +60,7 @@ export function PageHeader({
         </div>
       )}
 
-      <Link href={"/dashboard/tambah-data-pegawai/asn"}>Tambah Data</Link>
+      <Link href={`/dashboard/data-pegawai/tambah/${type}`}>Tambah Data</Link>
     </div>
   );
 }

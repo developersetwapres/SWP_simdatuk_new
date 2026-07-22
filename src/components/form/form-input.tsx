@@ -46,7 +46,7 @@ export function FormInput({
             min={type === "number" ? 0 : undefined}
             placeholder={placeholder}
             disabled={disabled}
-            className={cn("bg-background/80")}
+            className={cn("bg-background/80 h-10")}
           />
           <FieldError errors={[fieldState.error]} />
         </Field>

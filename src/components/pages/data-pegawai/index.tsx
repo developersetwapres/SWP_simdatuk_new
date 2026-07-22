@@ -23,6 +23,7 @@ export function DataPegawai({ type }: Props) {
 
   const { data, isLoading, isFetching, error } = useQuery({
     queryKey: ["employees", type, page, search],
+
     queryFn: () =>
       getEmployees({
         type: config.type,
@@ -43,6 +44,7 @@ export function DataPegawai({ type }: Props) {
   return (
     <div className="space-y-6">
       <PageHeader
+        type={type}
         title={config.title}
         total={data?.pagination.total}
         search={search}

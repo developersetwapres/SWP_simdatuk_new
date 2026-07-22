@@ -1,3 +1,4 @@
+import { EMPLOYEE_MODULES } from "@/constants/employee";
 import api from "@/lib/axios";
 import {
   EmployeeFilter,
@@ -29,44 +30,81 @@ export const createEmployee = async (payload: FormData) => {
   return data;
 };
 
+export const detailEmployee = async (id: string | number) => {
+  const { data } = await api.get("/employees/" + id);
+
+  return data;
+};
+
 /* -------------------------------------------------------------------------- */
 /*                               Master / Lookup                              */
 /* -------------------------------------------------------------------------- */
 
-export async function getPositions(params?: Record<string, unknown>) {
-  const { data } = await api.get<LookupResponse>("/positions", {
+export const getPositions = async (
+  params?: EmployeeFilter,
+): Promise<EmployeeResponse> => {
+  const { data } = await api.get<EmployeeResponse>("/positions", {
     params,
   });
 
   return data;
-}
+};
 
-export async function getWorkUnits(params?: Record<string, unknown>) {
-  const { data } = await api.get<LookupResponse>("/groups", {
+export const getEchelons = async (
+  params?: EmployeeFilter,
+): Promise<EmployeeResponse> => {
+  const { data } = await api.get<EmployeeResponse>("/echelons", {
     params,
   });
 
   return data;
-}
-
-export async function getInstitutions(params?: Record<string, unknown>) {
-  const { data } = await api.get<LookupResponse>("/institutions", {
+};
+export const getGrades = async (
+  params?: EmployeeFilter,
+): Promise<EmployeeResponse> => {
+  const { data } = await api.get<EmployeeResponse>("/grades", {
     params,
   });
 
   return data;
-}
+};
 
-export async function getGrades(params?: Record<string, unknown>) {
-  const { data } = await api.get<LookupResponse>("/grades", {
+export const getInstitutions = async (
+  params?: EmployeeFilter,
+): Promise<EmployeeResponse> => {
+  const { data } = await api.get<EmployeeResponse>("/institutions", {
     params,
   });
 
   return data;
-}
+};
 
-export async function getEmploymentTypes() {
-  const { data } = await api.get<LookupResponse>("/employment-types");
+export const getResidences = async (
+  params?: EmployeeFilter,
+): Promise<EmployeeResponse> => {
+  const { data } = await api.get<EmployeeResponse>("/residences", {
+    params,
+  });
 
   return data;
-}
+};
+
+export const getEmploymentTypes = async (
+  params?: EmployeeFilter,
+): Promise<EmployeeResponse> => {
+  const { data } = await api.get<EmployeeResponse>("/employment-types", {
+    params,
+  });
+
+  return data;
+};
+
+export const getWorkUnits = async (
+  params?: EmployeeFilter,
+): Promise<EmployeeResponse> => {
+  const { data } = await api.get<EmployeeResponse>("/groups", {
+    params,
+  });
+
+  return data;
+};

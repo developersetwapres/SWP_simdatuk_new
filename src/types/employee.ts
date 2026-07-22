@@ -45,4 +45,5 @@ export interface EmployeeFilter {
   grade_id?: number;
   echelon_id?: number;
   employment_type_id?: number;
+  filter_parent?: boolean;
 }

@@ -3,26 +3,29 @@
 import { useEffect, useState } from "react";
 
 import {
+  getEchelons,
   getEmploymentTypes,
   getGrades,
   getInstitutions,
   getPositions,
+  getResidences,
   getWorkUnits,
 } from "@/services/employee.service";
-
 interface LookupOption {
   label: string;
   value: string;
 }
 
-export function useEmployeeLookup() {
+export function useEmployeeLookup(type: number) {
   const [loading, setLoading] = useState(true);
 
   const [institutions, setInstitutions] = useState<LookupOption[]>([]);
   const [positions, setPositions] = useState<LookupOption[]>([]);
-  const [workUnits, setWorkUnits] = useState<LookupOption[]>([]);
+  const [residencesRes, setResidencesRes] = useState<LookupOption[]>([]);
   const [grades, setGrades] = useState<LookupOption[]>([]);
+  const [eselon, setEselon] = useState<LookupOption[]>([]);
   const [employmentTypes, setEmploymentTypes] = useState<LookupOption[]>([]);
+
   useEffect(() => {
     loadLookup();
   }, []);
@@ -32,23 +35,26 @@ export function useEmployeeLookup() {
       setLoading(true);
 
       const [
-        institutionRes,
         positionRes,
-        workUnitRes,
+        eselonRes,
         gradeRes,
+        institutionRes,
+        residencesRes,
         employmentTypeRes,
       ] = await Promise.all([
-        getInstitutions(),
-        getPositions(),
-        getWorkUnits(),
-        getGrades(),
-        getEmploymentTypes(),
+        getPositions({ page: 1, filter_parent: true, type }), //Jabatan
+        getEchelons({ page: 1 }), //Eselon
+        getGrades({ page: 1 }), //Pangkat / Golongan
+        getInstitutions({ page: 1 }), //Instansi Induk
+        getResidences({ page: 1 }),
+        getEmploymentTypes({ type }), //Tipe Pegawai
       ]);
 
-      setInstitutions(mapOptions(institutionRes.data));
       setPositions(mapOptions(positionRes.data));
-      setWorkUnits(mapOptions(workUnitRes.data));
+      setEselon(mapOptions(eselonRes.data));
       setGrades(mapGradeOptions(gradeRes.data));
+      setInstitutions(mapOptions(institutionRes.data));
+      setResidencesRes(mapOptions(residencesRes.data));
       setEmploymentTypes(mapOptions(employmentTypeRes.data));
     } catch (error) {
       console.error(error);
@@ -60,11 +66,12 @@ export function useEmployeeLookup() {
   return {
     loading,
 
-    institutions,
-    positions,
-    workUnits,
-    grades,
-    employmentTypes,
+    positions, // Jabatan
+    eselon, //Eselon
+    grades, //Pangkat / Golongan
+    institutions, //Instansi Induk
+    residencesRes, //Komplek
+    employmentTypes, //Tipe pegawai
 
     reload: loadLookup,
   };

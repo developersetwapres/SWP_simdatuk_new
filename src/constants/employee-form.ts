@@ -55,9 +55,9 @@ export const RELIGION_OPTIONS: EmployeeFormOption[] = [
 export const MARITAL_STATUS_OPTIONS: EmployeeFormOption[] = [
   { label: "Belum Menikah", value: 1 },
   { label: "Menikah", value: 2 },
-  { label: "Cerai Hidup", value: 3 },
-  { label: "Cerai Mati", value: 4 },
-  { label: "Lainnya", value: 5 },
+  { label: "Cerai", value: 3 },
+  { label: "Janda", value: 4 },
+  { label: "Duda", value: 5 },
 ];
 
 export const EDUCATION_LEVEL_OPTIONS: EmployeeFormOption[] = [
@@ -86,16 +86,15 @@ export const FAMILY_EDUCATION_OPTIONS: EmployeeFormOption[] = [
 
 export const EMPLOYMENT_STATUS_OPTIONS: EmployeeFormOption[] = [
   { label: "Aktif", value: 1 },
-  { label: "Cuti", value: 6 },
-  { label: "Tugas Belajar", value: 10 },
-  { label: "Tidak Aktif", value: 0 },
-];
-
-export const RESIDENCE_OPTIONS: EmployeeFormOption[] = [
-  { label: "Komplek A", value: 1 },
-  { label: "Komplek B", value: 2 },
-  { label: "Komplek C", value: 3 },
-  { label: "Non Komplek", value: 4 },
+  { label: "Pensiun", value: 2 },
+  { label: "Berhenti", value: 3 },
+  { label: "Meninggal", value: 4 },
+  { label: "Alih Status", value: 5 },
+  { label: "Aktif Perbantuan Setneg", value: 6 },
+  { label: "CLTN", value: 7 },
+  { label: "TBLN", value: 8 },
+  { label: "Non Aktif", value: 9 },
+  { label: "Hukuman Disiplin", value: 10 },
 ];
 
 export const STUDY_AREA_OPTIONS: EmployeeFormOption[] = [
@@ -157,15 +156,6 @@ export const YEAR_OPTIONS: EmployeeFormOption[] = Array.from(
   },
 );
 
-export const ECHELON_OPTIONS: EmployeeFormOption[] = [
-  { label: "II.a", value: 1 },
-  { label: "II.b", value: 2 },
-  { label: "III.a", value: 3 },
-  { label: "III.b", value: 4 },
-  { label: "IV.a", value: 5 },
-  { label: "IV.b", value: 6 },
-];
-
 export const fileImageAccept = ".png,.jpg,.jpeg";
 export const fileDocumentAccept = ".png,.jpg,.jpeg,.pdf";
 
@@ -174,6 +164,8 @@ interface EmployeeSectionLookups {
   positions: EmployeeFormOption[];
   grades: EmployeeFormOption[];
   institutions: EmployeeFormOption[];
+  eselon: EmployeeFormOption[];
+  residencesRes: EmployeeFormOption[];
 }
 
 function dataPegawaiFields(
@@ -183,8 +175,6 @@ function dataPegawaiFields(
   const isAsn = type === EMPLOYEE_TYPE.ASN;
   const isNonAsn = type === EMPLOYEE_TYPE.NON_ASN;
   const isOutsourcing = type === EMPLOYEE_TYPE.OUTSOURCING;
-
-  // console.log(lookups);
 
   const employmentTypeLabel = isOutsourcing
     ? "Jenis Outsourcing"
@@ -315,7 +305,7 @@ function dataPegawaiFields(
             name: "echelon_id",
             label: "Eselon",
             type: "select",
-            options: ECHELON_OPTIONS,
+            options: lookups.eselon,
           },
           { name: "echelon_effective_date", label: "TMT Eselon", type: "date" },
           {
@@ -412,7 +402,7 @@ function dataPegawaiFields(
             name: "residence_id",
             label: "Komplek",
             type: "select",
-            options: RESIDENCE_OPTIONS,
+            options: lookups.residencesRes,
           },
         ] satisfies EmployeeFormField[])
       : []),

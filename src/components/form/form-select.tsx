@@ -51,7 +51,7 @@ export function FormSelect({
           >
             <SelectTrigger
               id={name}
-              className="h-10 w-full bg-background/80 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate"
+              className="h-10 py-4.5 w-full bg-background/80 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate"
             >
               <SelectValue placeholder={placeholder ?? `Pilih ${label}`} />
             </SelectTrigger>

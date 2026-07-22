@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Eye, MoreHorizontal } from "lucide-react";
+import { Eye, MoreHorizontal, Pen } from "lucide-react";
 
 import { Employee } from "@/types/employee";
 import { EmployeeModule } from "@/constants/employee";
@@ -79,11 +79,23 @@ export function EmployeeTable({ module, employees }: Props) {
                     <DropdownMenuItem
                       render={
                         <Link
-                          href={`/dashboard/data-pegawai/${module}/${employee.id}`}
+                          href={`/dashboard/data-pegawai/detail/${module}/${employee.id}`}
                           className="flex items-center gap-2"
                         >
                           <Eye className="size-4" />
                           Detail
+                        </Link>
+                      }
+                    />
+
+                    <DropdownMenuItem
+                      render={
+                        <Link
+                          href={`/dashboard/data-pegawai/edit/${module}/${employee.id}`}
+                          className="flex items-center gap-2"
+                        >
+                          <Pen className="size-4" />
+                          Edit
                         </Link>
                       }
                     />

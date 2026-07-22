@@ -31,11 +31,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
-import { FormDate } from "./components/form-date";
-import { FormInput } from "./components/form-input";
-import { FormSelect } from "./components/form-select";
-import { FormTextarea } from "./components/form-textarea";
-import { FormUpload } from "./components/form-upload";
+import { FormDate } from "../../../form/form-date";
+import { FormInput } from "../../../form/form-input";
+import { FormSelect } from "../../../form/form-select";
+import { FormTextarea } from "../../../form/form-textarea";
+import { FormUpload } from "../../../form/form-upload";
 
 interface EmployeeFormSectionCardProps {
   section: EmployeeFormSection;
