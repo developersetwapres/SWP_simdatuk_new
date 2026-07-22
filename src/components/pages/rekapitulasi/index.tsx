@@ -2,13 +2,12 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { Building2 } from "lucide-react";
-
 import { SectionCard } from "@/components/section-card";
 import { getAsnRecapitulation } from "@/services/recapitulation.service";
 
-export function PegawaiASN() {
+export function Rekapitulasi(urlApi: string) {
   const { data, isLoading, error } = useQuery({
-    queryKey: ["recapitulation-asn"],
+    queryKey: ["recapitulations-outsource"],
     queryFn: getAsnRecapitulation,
   });
 
