@@ -9,7 +9,10 @@ export function buildEmployeeFormData(values: EmployeeFormValues): FormData {
   const fd = new FormData();
 
   // --- Scalar fields ---
-  const scalarFields: (keyof EmployeeFormValues)[] = [
+  // NOTE: We use `string[]` instead of `(keyof EmployeeFormValues)[]` because
+  // Zod v4's `z.input` type resolution may produce unexpected key sets at
+  // compile time, causing the loop to be empty or skip valid keys at runtime.
+  const scalarFields: string[] = [
     "photo_profile",
     "name",
     "title_prefix",
@@ -64,8 +67,10 @@ export function buildEmployeeFormData(values: EmployeeFormValues): FormData {
     "delete_photo_profile",
   ];
 
+  const obj = values as unknown as Record<string, unknown>;
+
   for (const key of scalarFields) {
-    const value = values[key];
+    const value = obj[key];
     if (value === undefined || value === null || value === "") continue;
 
     if (key === "photo_profile" || key === "employee_id_card") {
@@ -79,71 +84,84 @@ export function buildEmployeeFormData(values: EmployeeFormValues): FormData {
   }
 
   // --- Array fields ---
-  appendArrayField(fd, "educations", values.educations, [
-    "level",
-    "name",
-    "study_area",
-    "accreditation",
-    "faculty",
-    "major",
-    "year_of_graduation",
-    "description",
-    "degree_document",
-    "study_assignment_letter",
-    "academic_title_letter",
-  ]);
+  appendArrayField(
+    fd,
+    "educations",
+    obj.educations as Record<string, unknown>[] | undefined,
+    [
+      "level",
+      "name",
+      "study_area",
+      "accreditation",
+      "faculty",
+      "major",
+      "year_of_graduation",
+      "description",
+      "degree_document",
+      "study_assignment_letter",
+      "academic_title_letter",
+    ],
+  );
 
-  appendArrayField(fd, "families", values.families, [
-    "card_number",
-    "name",
-    "id_number",
-    "gender",
-    "religion",
-    "place_of_birth",
-    "date_of_birth",
-    "name_of_father",
-    "name_of_mother",
-    "relationship_status",
-    "education",
-    "occupation",
-    "occupation_description",
-    "marital_status",
-    "marriage_other_notes",
-    "mobile_phone",
-    "sequence_number",
-  ]);
+  appendArrayField(
+    fd,
+    "families",
+    obj.families as Record<string, unknown>[] | undefined,
+    [
+      "card_number",
+      "name",
+      "id_number",
+      "gender",
+      "religion",
+      "place_of_birth",
+      "date_of_birth",
+      "name_of_father",
+      "name_of_mother",
+      "relationship_status",
+      "education",
+      "occupation",
+      "occupation_description",
+      "marital_status",
+      "marriage_other_notes",
+      "mobile_phone",
+      "sequence_number",
+    ],
+  );
 
-  appendArrayField(fd, "leaves", values.leaves, [
-    "start_date",
-    "end_date",
-    "type",
-    "number",
-    "description",
-    "letter",
-  ]);
+  appendArrayField(
+    fd,
+    "leaves",
+    obj.leaves as Record<string, unknown>[] | undefined,
+    ["start_date", "end_date", "type", "number", "description", "letter"],
+  );
 
-  appendArrayField(fd, "notes", values.notes, ["description"]);
+  appendArrayField(
+    fd,
+    "notes",
+    obj.notes as Record<string, unknown>[] | undefined,
+    ["description"],
+  );
 
-  appendArrayField(fd, "assessments", values.assessments, [
-    "event_date",
-    "point",
-    "organizer",
-    "assessment_document",
-  ]);
+  appendArrayField(
+    fd,
+    "assessments",
+    obj.assessments as Record<string, unknown>[] | undefined,
+    ["event_date", "point", "organizer", "assessment_document"],
+  );
 
-  appendArrayField(fd, "competencies", values.competencies, [
-    "event_date",
-    "point",
-    "organizer",
-    "competency_document",
-  ]);
+  appendArrayField(
+    fd,
+    "competencies",
+    obj.competencies as Record<string, unknown>[] | undefined,
+    ["event_date", "point", "organizer", "competency_document"],
+  );
 
-  appendArrayField(fd, "talents", values.talents, [
-    "event_date",
-    "point",
-    "organizer",
-    "talent_document",
-  ]);
+  appendArrayField(
+    fd,
+    "talents",
+    obj.talents as Record<string, unknown>[] | undefined,
+    ["event_date", "point", "organizer", "talent_document"],
+  );
 
   return fd;
 }
