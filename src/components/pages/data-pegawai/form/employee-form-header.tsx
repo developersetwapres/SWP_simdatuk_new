@@ -16,6 +16,7 @@ interface EmployeeFormHeaderProps {
   employeeType: string;
   totalSections: number;
   onFillDummy?: () => void;
+  mode?: "create" | "edit";
 }
 
 export function EmployeeFormHeader({
@@ -24,6 +25,7 @@ export function EmployeeFormHeader({
   employeeType,
   totalSections,
   onFillDummy,
+  mode = "create",
 }: EmployeeFormHeaderProps) {
   return (
     <div className="rounded-xl border overflow-hidden bg-card">
@@ -35,7 +37,7 @@ export function EmployeeFormHeader({
               className="border-teal-200 bg-white/70 text-teal-700"
             >
               <SparklesIcon className="mr-1 h-4 w-4" />
-              Form Tambah Pegawai
+              {mode === "edit" ? "Form Edit Pegawai" : "Form Tambah Pegawai"}
             </Badge>
 
             <div className="space-y-2">

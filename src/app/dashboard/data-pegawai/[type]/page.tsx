@@ -20,5 +20,5 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
 
-  return <DataPegawai type={type} />;
+  return <DataPegawai type={type as EmployeeModule} />;
 }

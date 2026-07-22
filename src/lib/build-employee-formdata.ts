@@ -59,7 +59,9 @@ export function buildEmployeeFormData(values: EmployeeFormValues): FormData {
     "emergency_contact",
     "description",
     "type",
+    "delete_employee_id_card",
     "quit_date",
+    "delete_photo_profile",
   ];
 
   for (const key of scalarFields) {
