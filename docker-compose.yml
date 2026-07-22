@@ -3,19 +3,18 @@
 version: "3.8"
 
 services:
-  web:
+  swp_simdatuknew_app:
     build:
       context: .
       dockerfile: Dockerfile
-    image: swp-simdatuk-frontend:latest
+    image: swp_apisimdatuknew:latest
+    container_name: swp_apisimdatuknew
     # Do not set secrets or env in the image; set them here instead
     environment:
       # Example environment variable for the frontend to access the Laravel API
       NEXT_PUBLIC_API_URL: "http://10.1.53.220:8008/api"
       # Ensure production mode inside the container
       NODE_ENV: "production"
-    ports:
-      - "3000:3000"
     restart: unless-stopped
     # The container runs as non-root because the image user is switched in Dockerfile
     # If you need to pass additional env variables, add them here (do not hardcode in source)
