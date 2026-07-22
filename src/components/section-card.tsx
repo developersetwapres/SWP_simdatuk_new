@@ -8,8 +8,8 @@ import { RekapitulasiCard } from "./rekapitulsi-cards";
 
 interface SectionCardProps {
   title: string;
-  total: number;
-  totalItem: number;
+  total: number | ReactNode;
+  totalItem: number | ReactNode;
   description?: string;
   icon?: LucideIcon;
   className?: string;
@@ -72,7 +72,7 @@ export function SectionCard({
               key={index}
               title={item.name}
               total={item.total}
-              Icon={Building2}
+              icon={Building2}
             />
           ))}
         </div>

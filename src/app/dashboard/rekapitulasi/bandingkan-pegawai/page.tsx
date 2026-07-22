@@ -1,5 +1,3 @@
-import { PegawaiASN } from "@/components/pages/rekapitulasi";
-
 export default function Page() {
-  return <PegawaiASN />;
+  return <h1>on proses</h1>;
 }

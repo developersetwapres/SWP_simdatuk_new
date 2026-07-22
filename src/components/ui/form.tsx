@@ -11,11 +11,7 @@ import {
 } from "react-hook-form";
 
 import { cn } from "@/lib/utils";
-import {
-  Field,
-  FieldError,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 
 const Form = FormProvider;
 
@@ -90,7 +86,11 @@ function FormLabel({
   );
 }
 
-function FormControl({ children }: { children: React.ReactElement }) {
+function FormControl({
+  children,
+}: {
+  children: React.ReactElement<Record<string, unknown>>;
+}) {
   const { error, formItemId, formDescriptionId, formMessageId } =
     useFormField();
 
@@ -103,10 +103,7 @@ function FormControl({ children }: { children: React.ReactElement }) {
   });
 }
 
-function FormDescription({
-  className,
-  ...props
-}: React.ComponentProps<"p">) {
+function FormDescription({ className, ...props }: React.ComponentProps<"p">) {
   const { formDescriptionId } = useFormField();
 
   return (
