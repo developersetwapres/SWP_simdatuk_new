@@ -5,13 +5,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: "http://10.1.53.220:8008/api"
 
     image: swp_simdatuknew:latest
     container_name: swp_simdatuknew
 
     environment:
-      NEXT_PUBLIC_API_URL: "http://10.1.53.220:8008/api"
-      NODE_ENV: "production"
+      NODE_ENV: production
 
     restart: unless-stopped
 

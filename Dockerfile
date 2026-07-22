@@ -7,21 +7,18 @@
 ############################
 FROM node:20-alpine AS builder
 
-# Disable Next.js telemetry
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
 ENV NEXT_TELEMETRY_DISABLED=1
 
 WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
-
-# Install dependencies
 RUN npm ci
 
-# Copy source code
 COPY . .
 
-# Build Next.js (requires output: "standalone" in next.config.ts)
 RUN npm run build
 
 
