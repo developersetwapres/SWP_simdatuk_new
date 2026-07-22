@@ -15,5 +15,5 @@ export default async function Page({ params }: TypeApp) {
     notFound();
   }
 
-  return <DataPegawai type={type} />;
+  return <DataPegawai type={type as EmployeeModule} />;
 }

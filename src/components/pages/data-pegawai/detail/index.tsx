@@ -63,6 +63,8 @@ const emptyLookups = {
   positions: [] as EmployeeFormOption[],
   grades: [] as EmployeeFormOption[],
   institutions: [] as EmployeeFormOption[],
+  eselon: [] as EmployeeFormOption[],
+  residencesRes: [] as EmployeeFormOption[],
 };
 
 const repeatableAliases: Record<EmployeeArrayFieldName, string[]> = {
@@ -109,7 +111,7 @@ const headerFieldNames = new Set([
 
 export function DetailPegawai({ id, type }: DetailPegawaiProps) {
   const config = EMPLOYEE_MODULES[type];
-  const lookup = useEmployeeLookup();
+  const lookup = useEmployeeLookup(config.type);
 
   const { data, isLoading, isFetching, error } = useQuery({
     queryKey: ["employees", id],
@@ -236,7 +238,7 @@ export function DetailPegawai({ id, type }: DetailPegawaiProps) {
                 nativeButton={false}
                 size="sm"
                 render={
-                  <Link href={`/dashboard/data-pegawai/edit/${id}`}>
+                  <Link href={`/dashboard/data-pegawai/edit/${type}/${id}`}>
                     <Edit3Icon className="mr-1.5 size-4" />
                     Edit
                   </Link>

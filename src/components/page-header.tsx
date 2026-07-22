@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 
 interface PageHeaderProps {
-  type: string;
+  type?: string;
   title: string;
   description?: string;
   total?: number;
@@ -18,7 +18,7 @@ interface PageHeaderProps {
 }
 
 export function PageHeader({
-  type,
+  type = "asn",
   title,
   total,
   description,

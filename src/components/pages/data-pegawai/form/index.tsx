@@ -54,7 +54,7 @@ export function EmployeeForm({ type }: Props) {
         const message =
           error?.response?.data?.message ??
           error?.message ??
-          "Mohon maaf, fitur dalam kendala harap hubungi Tim IT!";
+          "Mohon maaf, fitur ini sedang mengalami kendala. Silakan hubungi Tim IT!";
 
         toast.error(message, { id: toastId });
       }

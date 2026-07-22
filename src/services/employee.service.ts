@@ -36,6 +36,19 @@ export const detailEmployee = async (id: string | number) => {
   return data;
 };
 
+export const updateEmployee = async (
+  id: string | number,
+  payload: FormData,
+) => {
+  const { data } = await api.post(`/employees/${id}`, payload, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return data;
+};
+
 /* -------------------------------------------------------------------------- */
 /*                               Master / Lookup                              */
 /* -------------------------------------------------------------------------- */

@@ -26,6 +26,11 @@ const optionalEmail = (message: string) =>
   z.preprocess(emptyToUndefined, z.string().email(message).optional());
 
 const optionalFile = z.any().optional();
+const optionalBoolean = () =>
+  z.preprocess(
+    (value) => (value === "" ? undefined : value),
+    z.boolean().optional(),
+  );
 
 const educationSchema = z.object({
   level: optionalNumber(),
@@ -144,8 +149,12 @@ const baseEmployeeSchema = z.object({
   office_email: optionalEmail("Format email dinas tidak valid"),
   emergency_contact: requiredString("Kontak darurat wajib diisi", 512),
   description: optionalString(160),
-  type: z.coerce.number().pipe(z.union([z.literal(1), z.literal(2), z.literal(3)])),
+  type: z.coerce
+    .number()
+    .pipe(z.union([z.literal(1), z.literal(2), z.literal(3)])),
+  delete_employee_id_card: optionalBoolean(),
   quit_date: optionalDate(),
+  delete_photo_profile: optionalBoolean(),
   educations: z.array(educationSchema).default([]),
   families: z.array(familySchema).default([]),
   leaves: z.array(leaveSchema).default([]),
@@ -155,49 +164,51 @@ const baseEmployeeSchema = z.object({
   talents: z.array(talentSchema).default([]),
 });
 
-export const employeeFormSchema = baseEmployeeSchema.superRefine((value, ctx) => {
-  if (value.type === 1) {
-    if (!value.cpns_effective_date) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["cpns_effective_date"],
-        message: "TMT CPNS wajib diisi",
-      });
-    }
+export const employeeFormSchema = baseEmployeeSchema.superRefine(
+  (value, ctx) => {
+    if (value.type === 1) {
+      if (!value.cpns_effective_date) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["cpns_effective_date"],
+          message: "TMT CPNS wajib diisi",
+        });
+      }
 
-    if (!value.grade_id) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["grade_id"],
-        message: "Pangkat / Golongan wajib dipilih",
-      });
-    }
+      if (!value.grade_id) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["grade_id"],
+          message: "Pangkat / Golongan wajib dipilih",
+        });
+      }
 
-    if (!value.grade_effective_date) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["grade_effective_date"],
-        message: "TMT Pangkat / Golongan wajib diisi",
-      });
-    }
+      if (!value.grade_effective_date) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["grade_effective_date"],
+          message: "TMT Pangkat / Golongan wajib diisi",
+        });
+      }
 
-    if (!value.email) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["email"],
-        message: "Email wajib diisi",
-      });
-    }
+      if (!value.email) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["email"],
+          message: "Email wajib diisi",
+        });
+      }
 
-    if (!value.office_email) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["office_email"],
-        message: "Email dinas wajib diisi",
-      });
+      if (!value.office_email) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["office_email"],
+          message: "Email dinas wajib diisi",
+        });
+      }
     }
-  }
-});
+  },
+);
 
 export type EmployeeFormValues = z.input<typeof employeeFormSchema>;
 export type EmployeeFormSubmitValues = z.output<typeof employeeFormSchema>;
