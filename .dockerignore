@@ -1,0 +1,31 @@
+# Node / Next.js artifacts
+node_modules
+.next
+out
+build
+
+# Local env and editor config
+.env
+.env.local
+.env.*
+.vscode
+.idea
+
+# Git
+.git
+.gitignore
+
+# OS
+.DS_Store
+
+# Logs
+npm-debug.log
+
+# Don't copy Docker files into the image context unnecessarily
+Dockerfile
+docker-compose.yml
+
+# Optional: coverage and local artifacts
+coverage
+
+# Note: keep package.json and package-lock.json so Docker caching works
