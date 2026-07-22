@@ -1,5 +1,4 @@
 import { Rekapitulasi } from "@/components/pages/rekapitulasi";
-import urlApi from "@/constants/recapitulation";
 import { TypeApp } from "@/types/app-container";
 import { notFound } from "next/navigation";
 
@@ -10,5 +9,5 @@ export default async function Page({ params }: TypeApp) {
     notFound();
   }
 
-  return <Rekapitulasi urlApi={urlApi(type)} />;
+  return <Rekapitulasi type={type} />;
 }

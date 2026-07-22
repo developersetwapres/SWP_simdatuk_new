@@ -3,7 +3,6 @@ import {
   ComparisonParams,
   ComparisonResponse,
   DiagramResponse,
-  PromotionResponse,
   RecapitulationResponse,
 } from "@/types/recapitulation";
 
@@ -12,24 +11,27 @@ export async function getEmployeeComposition() {
   return data;
 }
 
-export async function getAsnRecapitulation() {
-  const { data } = await api.get<RecapitulationResponse>(
-    "/recapitulations-asn",
-  );
-  return data;
-}
+export async function getRecapitulation(type: string) {
+  const urlApi = (() => {
+    switch (type) {
+      case "komposisi-pegawai":
+        return "recapitulations";
 
-export async function getNonAsnRecapitulation() {
-  const { data } = await api.get<RecapitulationResponse>(
-    "/recapitulations-nonasn",
-  );
-  return data;
-}
+      case "pegawai-asn":
+        return "recapitulations-asn";
 
-export async function getOutsourceRecapitulation() {
-  const { data } = await api.get<RecapitulationResponse>(
-    "/recapitulations-outsource",
-  );
+      case "pegawai-non-asn":
+        return "recapitulations-nonasn";
+
+      case "pegawai-outsourcing":
+        return "recapitulations-outsource";
+
+      case "promosi-pegawai":
+        return "promotions";
+    }
+  })();
+
+  const { data } = await api.get<RecapitulationResponse>(`/${urlApi}`);
   return data;
 }
 
@@ -54,14 +56,5 @@ export async function getDiagrams(id?: number | string) {
     params: { id },
   });
 
-  return data;
-}
-
-/* -------------------------------------------------------------------------- */
-/*                              Promosi Pegawai                               */
-/* -------------------------------------------------------------------------- */
-
-export async function getPromotions() {
-  const { data } = await api.get<PromotionResponse>("/promotions");
   return data;
 }
