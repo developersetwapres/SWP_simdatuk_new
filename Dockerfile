@@ -1,68 +1,59 @@
-# Multi-stage Dockerfile for Next.js production (standalone output)
-# - Builds the app with npm (build stage)
-# - Uses Next.js "standalone" output from `.next/standalone`
-# - Runs in a slim production image as a non-root user
+# ==========================================================
+# Dockerfile - Next.js 16 Production (Standalone)
+# ==========================================================
 
-###############
-# Builder
-###############
+############################
+# Builder Stage
+############################
 FROM node:20-alpine AS builder
 
-# Set working directory
+# Disable Next.js telemetry
+ENV NEXT_TELEMETRY_DISABLED=1
+
 WORKDIR /app
 
-# Copy package manifests first to leverage Docker layer caching
+# Copy package files
 COPY package*.json ./
 
-# Install dependencies (including devDependencies needed for build)
+# Install dependencies
 RUN npm ci
 
-# Copy the rest of the source
+# Copy source code
 COPY . .
 
-# Ensure Next is configured to produce `output: 'standalone'` in next.config.js
-# Build the production output (this creates `.next/standalone`)
+# Build Next.js (requires output: "standalone" in next.config.ts)
 RUN npm run build
 
 
-###############
-# Production image
-###############
+############################
+# Runner Stage
+############################
 FROM node:20-alpine AS runner
 
-# Set NODE_ENV for optimizations
 ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3000
 
 WORKDIR /app
 
-# Create a non-root user `nextjs` and group with a home directory
-RUN addgroup -S nextjs && adduser -S nextjs -G nextjs
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs \
+    && adduser -S nextjs -u 1001
 
-# Copy the Next.js standalone server build and static assets from builder
-# `.next/standalone` contains a minimal `package.json` and server entry `server.js`
-COPY --from=builder /app/.next/standalone .
-# Static files used by the server at runtime
+# Copy standalone server
+COPY --from=builder /app/.next/standalone ./
+
+# Copy static assets
 COPY --from=builder /app/.next/static ./.next/static
-# Public assets (if present)
+
+# Copy public folder (if exists)
 COPY --from=builder /app/public ./public
 
-# Install only production dependencies referenced by the standalone package.json
-# The standalone folder contains a small package.json with needed deps
-RUN npm ci --omit=dev
+# Set ownership
+RUN chown -R nextjs:nodejs /app
 
-# Fix ownership for the non-root user
-RUN chown -R nextjs:nextjs /app
-
-# Switch to non-root user
 USER nextjs
 
-# Expose the standard Next.js port
 EXPOSE 3000
 
-# Start the Next.js standalone server. The standalone build exposes `server.js`
 CMD ["node", "server.js"]
-
-# Notes:
-# - This image does not run the Next.js dev server. It runs the production server
-#   produced by `next build` with `output: 'standalone'`.
-# - Keep environment configuration in docker-compose.yml (not baked into image).
