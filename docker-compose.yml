@@ -1,18 +1,18 @@
 version: "3.8"
 
 services:
-  swp_simdatuknew_app:
+  simdatuk-cms2_app:
     build:
       context: .
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_API_URL: "http://10.1.53.220:8008/api"
 
-    image: swp_simdatuknew:latest
-    container_name: swp_simdatuknew
+    image: simdatuk-cms2:latest
+    container_name: swp_simdatuk-cms2
 
-    environment:
-      NODE_ENV: production
+    # environment:
+    #   NODE_ENV: production
 
     restart: unless-stopped
 
